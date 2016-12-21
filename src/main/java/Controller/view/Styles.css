@@ -1,0 +1,47 @@
+.button {
+    -fx-text-fill: black;
+    -fx-font-size: 25;
+    -fx-background-color: lightgrey;
+    -fx-border-style: solid;
+    -fx-border-width: 5;
+}
+
+.buttonPressed {
+    -fx-text-fill: white;
+    -fx-font-size: 25;
+    -fx-background-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 5;
+}
+
+.button-arrow {
+    -fx-text-fill: black;
+    -fx-font-size: 25;
+    -fx-background-color: transparent;
+    -fx-border-style: none;
+}
+
+.label {
+    -fx-font-size: 25;
+}
+
+.textfield {
+    -fx-font-size: 25;
+    -fx-background-color: white;
+    -fx-border-style: solid;
+}
+
+.textfield-error {
+    -fx-border-color: red;
+    -fx-border-width: 5;
+}
+
+.textfield-trans {
+    -fx-font-size: 25;
+    -fx-border-style: none;
+    -fx-background-color: transparent;
+}
+
+.mainSheet {
+    -fx-font-size: 12;
+}

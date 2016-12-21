@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1800.0" styleClass="mainSheet" stylesheets="@../MainSheetStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.view.MainSheet.MainSheetController">
+   <children>
+      <BorderPane prefHeight="1000.0" prefWidth="1800.0" styleClass="mainSheet">
+         <top>
+            <VBox prefHeight="98.0" prefWidth="1800.0" styleClass="mainSheet" BorderPane.alignment="CENTER">
+               <children>
+                  <MenuBar styleClass="mainSheet">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Close" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+                  <HBox alignment="CENTER_LEFT" prefHeight="112.0" prefWidth="1600.0" spacing="25.0">
+                     <children>
+                        <Label text="Name" />
+                        <TextField fx:id="charName" prefHeight="37.0" prefWidth="238.0" styleClass="textfield" />
+                        <Label fx:id="name" />
+                        <Label fx:id="race" text="No race" />
+                        <Label fx:id="classes" text="No class" />
+                        <Label fx:id="ac" text="AC: 0" />
+                        <Label fx:id="cash" text="Cash: 0 GP" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <TabPane prefHeight="753.0" prefWidth="1131.0" styleClass="textfield" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab closable="false" text="Classes">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1005.0" prefWidth="616.0" />
+                  </content>
+                </Tab>
+                <Tab text="Background">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </center>
+         <right>
+            <HBox prefHeight="1069.0" prefWidth="669.0" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
+   </children>
+</AnchorPane>
