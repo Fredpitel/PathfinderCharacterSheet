@@ -11,7 +11,7 @@
                 {"title": "Reflex Save: ", "value": "Slow"},
                 {"title": "Will Save: ", "value": "Slow"},
                 {"title": "Skill Points: ", "value": "4 + Int Modifier"},
-                {"title": "Class Skills: ", "value": "Acrobatics (Dex), Climb (Str), Craft (Int), Handle Animal (Cha), Intimidate (Cha), Knowledge (nature) (Int), Perception (Wis), Ride (Dex), Survival (Wis), and Swim (Str)."},
+                {"title": "Class Skills: ", "value": "Acrobatics (Dex), Climb (Str), Craft (Int), Handle Animal (Cha), Intimidate (Cha), Knowledge (nature) (Int), Perception (Wis), Ride (Dex), Survival (Wis), Swim (Str)."},
                 {"title": "Maximum Levels: ", "value": "20\n"},
                 {"title": "", "value": "For some, there is only rage. In the ways of their people, in the fury of their passion, in the howl of battle, conflict is all these brutal souls know. Savages, hired muscle, masters of vicious martial techniques, they are not soldiers or professional warriors-they are the battle possessed, creatures of slaughter and spirits of war. Known as barbarians, these warmongers know little of training, preparation, or the rules of warfare; for them, only the moment exists, with the foes that stand before them and the knowledge that the next moment might hold their death. They possess a sixth sense in regard to danger and the endurance to weather all that might entail. These brutal warriors might rise from all walks of life, both civilized and savage, though whole societies embracing such philosophies roam the wild places of the world. Within barbarians storms the primal spirit of battle, and woe to those who face their rage.\n"},
                 {"title": "Role: ", "value": "Barbarians excel in combat, possessing the martial prowess and fortitude to take on foes seemingly far superior to themselves. With rage granting them boldness and daring beyond that of most other warriors, barbarians charge furiously into battle and ruin all who would stand in their way.\n"},
@@ -33,6 +33,26 @@
                     "error_message": "Alignment not permitted. Forbidden alignments: Any Lawful\n"
                 }
             ]
+        },
+        {
+            "className": "Bard",
+            "description": [
+                {"title": "Hit Dice: ", "value": "d8"},
+                {"title": "Weapons: ", "value": "Simple, Frostkiss whip, Longsword, Rapier, Sap, Scorpion whip, Short sword, Shortbow, Whip"},
+                {"title": "Armor: ", "value": "Light, Shields"},
+                {"title": "Attack Bonus: ", "value": "Medium"},
+                {"title": "Fortitude Save: ", "value": "Slow"},
+                {"title": "Reflex Save: ", "value": "Fast"},
+                {"title": "Will Save: ", "value": "Fast"},
+                {"title": "Skill Points: ", "value": "6 + Int Modifier"},
+                {"title": "Class Skills: ", "value": "Acrobatics (Dex), Appraise (Int), Bluff (Cha), Climb (Str), Craft (Int), Diplomacy (Cha), Disguise (Cha), Escape Artist (Dex), Intimidate (Cha), Knowledge (all) (Int), Linguistics (Int), Perception (Wis), Perform (Cha), Profession (Wis), Sense Motive (Wis), Sleight of Hand (Dex), Spellcraft (Int), Stealth (Dex), Use Magic Device (Cha)."},
+                {"title": "Spells :", "value": "Arcane, Spontaneous, bonus spells from Charisma"},
+                {"title": "Maximum Levels: ", "value": "20\n"},
+                {"title": "", "value": "Untold wonders and secrets exist for those skillful enough to discover them. Through cleverness, talent, and magic, these cunning few unravel the wiles of the world, becoming adept in the arts of persuasion, manipulation, and inspiration. Typically masters of one or many forms of artistry, bards possess an uncanny ability to know more than they should and use what they learn to keep themselves and their allies ever one step ahead of danger. Bards are quick-witted and captivating, and their skills might lead them down many paths, be they gamblers or jacks-of-all-trades, scholars or performers, leaders or scoundrels, or even all of the above. For bards, every day brings its own opportunities, adventures, and challenges, and only by bucking the odds, knowing the most, and being the best might they claim the treasures of each.\n"},
+                {"title": "Role: ", "value": "Bards capably confuse and confound their foes while inspiring their allies to ever-greater daring. While accomplished with both weapons and magic, the true strength of bards lies outside melee, where they can support their companions and undermine their foes without fear of interruptions to their performances.\n"},
+                {"title": "Alignment: ", "value": "Any\n"},
+            ],
+            "requirements": []
         }
     ]
 }

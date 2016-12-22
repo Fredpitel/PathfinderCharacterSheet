@@ -70,27 +70,27 @@ public class ClassSelectionController {
                 }
             }
             
-            addClickListener(btn);
+            addClickListener(btn, i);
         }
     }
     
-    private void addClickListener(Button btn) {
+    private void addClickListener(Button btn, int index) {
         btn.setOnMouseClicked((e) -> {
             for(int i = 0; i < buttons.size(); i++){
                 buttons.get(i).setStyle("-fx-border-width: 1");
             }
             btn.setStyle("-fx-border-width: 3");
-            
-            showClassDescription(btn);
+            classText.getChildren().clear();
+            showClassDescription(index);
         });
         
         selected = btn;
     }
     
-    private void showClassDescription(Button btn) {
-        JSONArray description = classes.getJSONObject(buttons.indexOf(btn)).getJSONArray("description");
+    private void showClassDescription(int index) {
+        JSONArray description = classes.getJSONObject(index).getJSONArray("description");
         
-        className.setText(classes.getJSONObject(buttons.indexOf(btn)).getString("className") + "\n\n");
+        className.setText(classes.getJSONObject(index).getString("className") + "\n\n");
         
         if(errors.size() > 0) {
             for(String error: errors) {
