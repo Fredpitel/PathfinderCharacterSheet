@@ -6,10 +6,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Character {
+    public enum alignments {NO_ALIGNMENT, LG,NG, CG, LN, TN, CN, LE, NE, CE};
+    
     private final StringProperty charName;
     private final StringProperty playerName;
     private final IntegerProperty remainingLevels;
     private final IntegerProperty goldTotal;
+    public alignments alignment = alignments.NO_ALIGNMENT;
     
     public Wealth wealth;
     

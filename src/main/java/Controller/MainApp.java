@@ -69,7 +69,6 @@ public class MainApp extends Application {
             
             MainSheetController controller = loader.getController();
             controller.setMainApp(this);
-            controller.initializeFields();
             
             Scene scene = new Scene(root);
             stage.setScene(scene);

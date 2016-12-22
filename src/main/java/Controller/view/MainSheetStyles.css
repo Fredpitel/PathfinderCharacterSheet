@@ -1,3 +1,21 @@
-.mainSheet {
+.mainSheet, .button-trans {
     -fx-font-size: 16;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.levelBox, .button-trans {
+    -fx-border-style: solid;
+}
+
+.label-bold {
+    -fx-font-weight: bold;
+}
+
+.button-trans {
+    -fx-background-color: transparent;
+}
+
+.button-invalid {
+    -fx-text-fill: lightgrey;
 }
