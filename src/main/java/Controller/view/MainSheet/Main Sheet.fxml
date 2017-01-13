@@ -38,7 +38,8 @@
                         <TextField fx:id="charName" prefHeight="37.0" prefWidth="238.0" styleClass="textfield" />
                         <Label fx:id="name" />
                         <Label fx:id="race" text="No race" />
-                        <Label fx:id="classes" text="No class" />
+                        <Label fx:id="classes" />
+                        <Label fx:id="hp" />
                         <Label fx:id="ac" text="AC: 0" />
                         <Label fx:id="cash" text="Cash: 0 GP" />
                      </children>
@@ -52,8 +53,14 @@
                </children>
             </VBox>
          </top>
+         <right>
+            <HBox prefHeight="863.0" prefWidth="884.0" styleClass="levelBox" BorderPane.alignment="CENTER" />
+         </right>
+         <bottom>
+            <Pane prefHeight="39.0" prefWidth="1800.0" styleClass="levelBox" BorderPane.alignment="CENTER" />
+         </bottom>
          <center>
-            <TabPane prefHeight="863.0" prefWidth="915.0" styleClass="levelBox" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane prefHeight="861.0" prefWidth="915.0" styleClass="levelBox" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
                 <Tab closable="false" text="Classes">
                     <content>
@@ -68,12 +75,6 @@
               </tabs>
             </TabPane>
          </center>
-         <right>
-            <HBox prefHeight="863.0" prefWidth="871.0" styleClass="levelBox" BorderPane.alignment="CENTER" />
-         </right>
-         <bottom>
-            <Pane prefHeight="39.0" prefWidth="1800.0" styleClass="levelBox" BorderPane.alignment="CENTER" />
-         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>

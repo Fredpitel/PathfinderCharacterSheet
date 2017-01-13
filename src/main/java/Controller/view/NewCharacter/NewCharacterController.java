@@ -101,7 +101,7 @@ public class NewCharacterController {
         } else if (playerName.getText().equals("")) {
             playerName.getStyleClass().add("textfield-error");
         } else {
-            mainApp.mainChar = new Character(charName.getText(), playerName.getText(), checkValue(startLevels, "1", "99"), checkValue(plat, "0", "999"), checkValue(gold, "0", "999"), checkValue(silv, "0", "999"), checkValue(copp, "0", "999"));
+            mainApp.mainChar = new Character(mainApp, charName.getText(), playerName.getText(), checkValue(startLevels, "1", "99"), checkValue(plat, "0", "999"), checkValue(gold, "0", "999"), checkValue(silv, "0", "999"), checkValue(copp, "0", "999"));
             mainApp.showMainSheet();   
         }
     }

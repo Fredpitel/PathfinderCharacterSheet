@@ -12,10 +12,42 @@
     -fx-font-weight: bold;
 }
 
+.button-tab {
+    -fx-text-fill: black;
+    -fx-font-size: 18;
+    -fx-background-color: lightgrey;
+    -fx-border-style: solid;
+    -fx-border-width: 3;
+}
+
+.buttonPressed {
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-background-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 3;
+}
+
 .button-trans {
     -fx-background-color: transparent;
 }
 
 .button-invalid {
     -fx-text-fill: lightgrey;
+}
+
+.button-arrow {
+    -fx-font-size: 24;
+    -fx-text-fill: black;
+    -fx-background-color: transparent;
+    -fx-border-style: none;
+}
+
+.textfield-trans {
+    -fx-border-style: none;
+    -fx-background-color: transparent;
+}
+
+.levelUp {
+    -fx-text-fill: red;
 }

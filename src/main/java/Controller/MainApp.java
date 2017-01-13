@@ -1,5 +1,6 @@
 package Controller;
 
+import Controller.JSON.JSONUtils;
 import Controller.model.Character;
 
 import java.io.IOException;
@@ -12,17 +13,21 @@ import javafx.stage.Stage;
 import Controller.view.MainMenu.MainMenuController;
 import Controller.view.MainSheet.MainSheetController;
 import Controller.view.NewCharacter.NewCharacterController;
+import net.sf.json.JSONObject;
 
 public class MainApp extends Application {
     private Stage stage;
     private AnchorPane root;
     
+    public JSONObject jsonClasses;
     public Character mainChar;
     
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         this.stage.setTitle("Pathfinder Character Sheet");
+        
+        jsonClasses = JSONUtils.jsonToObject("JSON Files/classes.json");
         
         showMainMenu();
     }

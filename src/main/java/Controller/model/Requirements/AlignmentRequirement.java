@@ -1,7 +1,7 @@
 package Controller.model.Requirements;
 
-import net.sf.json.JSONObject;
 import Controller.model.Character;
+import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
 
 public class AlignmentRequirement implements Requirement {

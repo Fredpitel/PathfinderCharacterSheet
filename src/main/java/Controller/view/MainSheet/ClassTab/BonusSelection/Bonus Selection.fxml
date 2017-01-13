@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="757.0" styleClass="mainSheet" stylesheets="@../../../MainSheetStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.view.MainSheet.ClassTab.BonusSelection.BonusSelectionController">
+   <children>
+      <HBox alignment="CENTER" layoutX="60.0" layoutY="436.0" prefHeight="89.0" prefWidth="637.0" spacing="120.0">
+         <children>
+            <Button fx:id="addAndClose" disable="true" mnemonicParsing="false" onMouseReleased="#addAndClose" styleClass="button-tab" text="Add &amp; Close" />
+            <Button fx:id="add" disable="true" mnemonicParsing="false" onMouseReleased="#add" styleClass="button-tab" text="Add" />
+            <Button fx:id="close" mnemonicParsing="false" onMouseReleased="#close" styleClass="button-tab" text="Close" />
+         </children>
+      </HBox>
+      <ScrollPane hbarPolicy="NEVER" layoutX="57.0" layoutY="70.0" prefHeight="279.0" prefWidth="643.0" vbarPolicy="NEVER">
+         <content>
+            <VBox fx:id="classBox" prefHeight="277.0" prefWidth="641.0" styleClass="levelBox">
+               <children>
+                  <Button fx:id="strength" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="STRENGTH" />
+                  <Button fx:id="constitution" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="CONSTITUTION" />
+                  <Button fx:id="dexterity" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="DEXTERITY" />
+                  <Button fx:id="intelligence" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="INTELLIGENCE" />
+                  <Button fx:id="wisdom" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="WISDOM" />
+                  <Button fx:id="charisma" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="CHARISMA" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+      <Label fx:id="pointsLeft" alignment="CENTER" contentDisplay="CENTER" layoutX="57.0" layoutY="27.0" prefHeight="25.0" prefWidth="643.0" />
+      <HBox alignment="CENTER" layoutX="137.0" layoutY="384.0" prefHeight="52.0" prefWidth="503.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Bonus points to Add: " />
+            <Button fx:id="removePoints" alignment="CENTER" disable="true" mnemonicParsing="false" onMouseClicked="#removePoints" prefHeight="37.0" prefWidth="37.0" styleClass="button-arrow" />
+            <TextField fx:id="points" alignment="CENTER" prefHeight="37.0" prefWidth="56.0" styleClass="textfield-trans" text="1" />
+            <Button fx:id="addPoints" alignment="CENTER" layoutX="283.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#addPoints" prefHeight="37.0" prefWidth="37.0" styleClass="button-arrow" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

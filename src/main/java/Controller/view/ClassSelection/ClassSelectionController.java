@@ -4,23 +4,29 @@ import Controller.MainApp;
 import Controller.JSON.JSONUtils;
 import Controller.model.Requirements.Requirement;
 import Controller.model.Requirements.RequirementFactory;
+import Controller.view.MainSheet.ClassTab.ClassTabController;
 import java.util.ArrayList;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public class ClassSelectionController {
     private MainApp mainApp;
+    private Stage stage;
+    private ClassTabController classTabController;
     private JSONArray classes;
     private final ArrayList<Button> buttons;
     private Button selected;
-    private final ArrayList<String> errors;
+    private int currentLevel = 1;
     
     @FXML
     private Label levelsLeft;
@@ -34,24 +40,50 @@ public class ClassSelectionController {
     @FXML
     private TextFlow classText;
     
+    @FXML
+    private Button addLevels;
+    
+    @FXML
+    private Button removeLevels;
+    
+    @FXML
+    private TextField levels;
+    
+    @FXML
+    private Button addAndClose;
+    
+    @FXML
+    private Button add;
+    
+    @FXML
+    private Button close;
+    
     public ClassSelectionController(){
         this.buttons = new ArrayList();
-        this.errors = new ArrayList();
     }
     
     @FXML
-    private void initialize() {}
+    private void initialize() {
+        addLevels.setText("\u25B6");
+        removeLevels.setText("\u25C0");
+        
+        forceNumberInput(levels);
+        addMousePressedEventListener(addAndClose);
+        addMousePressedEventListener(add);
+        addMousePressedEventListener(close);
+    }
     
     @FXML
     private void initializeFields() {
-        levelsLeft.setText(mainApp.mainChar.getRemainingLevels() + " level(s) left to add");
+        levelsLeft.textProperty().bind(mainApp.mainChar.getRemainingLevelsProperty().asString("%s level(s) left to add"));
+        if(mainApp.mainChar.getRemainingLevels() ==  1) {
+            addLevels.setDisable(true);
+        }
     }
     
     @FXML
     private void intializeSelection() {
-        JSONObject jsonClasses = JSONUtils.jsonToObject("JSON Files/classes.json");
-        
-        classes = jsonClasses.getJSONArray("classes");
+        classes = mainApp.jsonClasses.getJSONArray("classes");
 
         for(int i = 0; i < classes.size(); i++){
             Button btn = new Button(classes.getJSONObject(i).getString("className"));
@@ -60,14 +92,8 @@ public class ClassSelectionController {
             classBox.getChildren().add(btn);
             buttons.add(btn);
             
-            JSONArray requirements = classes.getJSONObject(i).getJSONArray("requirements");
-            for(int j = 0; j < requirements.size(); j++) {
-                JSONObject req = requirements.getJSONObject(j);
-                Requirement requirement = new RequirementFactory().createRequirement(req.getString("type"));
-                if(!requirement.validate(mainApp.mainChar, req)) {
-                    btn.getStyleClass().add("button-invalid");
-                    errors.add(req.getString("error_message"));
-                }
+            if(getErrors(i).size() > 0) {
+                btn.getStyleClass().add("button-invalid");
             }
             
             addClickListener(btn, i);
@@ -76,21 +102,26 @@ public class ClassSelectionController {
     
     private void addClickListener(Button btn, int index) {
         btn.setOnMouseClicked((e) -> {
+            addAndClose.setDisable(false);
+            add.setDisable(false);
+            
             for(int i = 0; i < buttons.size(); i++){
                 buttons.get(i).setStyle("-fx-border-width: 1");
             }
+            
             btn.setStyle("-fx-border-width: 3");
             classText.getChildren().clear();
             showClassDescription(index);
+            selected = btn;
         });
-        
-        selected = btn;
     }
     
     private void showClassDescription(int index) {
         JSONArray description = classes.getJSONObject(index).getJSONArray("description");
         
         className.setText(classes.getJSONObject(index).getString("className") + "\n\n");
+        
+        ArrayList<String> errors = getErrors(index);
         
         if(errors.size() > 0) {
             for(String error: errors) {
@@ -112,8 +143,108 @@ public class ClassSelectionController {
         }
     }
     
-    public void setMainApp(MainApp mainApp) {
+    private ArrayList<String> getErrors(int index) {
+        ArrayList<String> errors = new ArrayList();
+        JSONArray requirements = classes.getJSONObject(index).getJSONArray("requirements");
+        
+        for(int j = 0; j < requirements.size(); j++) {
+            JSONObject req = requirements.getJSONObject(j);
+            Requirement requirement = new RequirementFactory().createRequirement(req.getString("type"));
+            if(!requirement.validate(mainApp.mainChar, req)) {
+                errors.add(req.getString("error_message"));
+            }
+        }
+        
+        return errors;
+    }
+    
+    @FXML
+    private void addLevels() {
+        removeLevels.setDisable(false);
+        currentLevel++;
+        levels.setText(currentLevel + "");
+        if(currentLevel == mainApp.mainChar.getRemainingLevels()) {
+            addLevels.setDisable(true);
+        }
+    }
+    
+    @FXML
+    private void removeLevels() {
+        addLevels.setDisable(false);
+        currentLevel--;
+        levels.setText(currentLevel + "");
+        if(currentLevel == 1) {
+            removeLevels.setDisable(true);
+        }
+    }
+    
+    private int checkValue(TextField tf, String min, String max) {
+        if(tf.getText().equals("")){
+            tf.setText(min);
+        } else {
+            try {
+                int i = Integer.parseInt(tf.getText());
+                if(i > Integer.parseInt(max)) {
+                    tf.setText(max);
+                }
+            } catch (Exception e) {
+                tf.setText(max);
+            }
+        }
+        
+        return Integer.parseInt(tf.getText());
+    }
+    
+    private void forceNumberInput(TextField tf) {
+        tf.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                tf.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
+    
+    @FXML
+    private void addAndClose() {
+        createClassLevel();
+        stage.close();
+    }
+    
+    @FXML
+    private void add() {
+        add.getStyleClass().remove("buttonPressed");
+        createClassLevel();
+        levels.setText("1");
+        removeLevels.setDisable(true);
+        if(mainApp.mainChar.getRemainingLevels() == 1){
+            addLevels.setDisable(true);
+        } else if(mainApp.mainChar.getRemainingLevels() == 0) {
+            addLevels.setDisable(true);
+            add.setDisable(true);
+            addAndClose.setDisable(true);
+        }
+    }
+    
+    private void createClassLevel() {
+        int levelsAdded = checkValue(levels, "1", "" + mainApp.mainChar.getRemainingLevels());
+        mainApp.mainChar.addCharLevels(selected.getText(), levelsAdded, classes.getJSONObject(buttons.indexOf(selected)).getInt("hitdie"));
+        classTabController.listLevels();
+    }
+    
+    @FXML
+    private void close() {
+        stage.close();
+    }
+    
+    private void addMousePressedEventListener(Button btn) {
+        btn.setOnMousePressed((e) -> {
+            btn.getStyleClass().add("buttonPressed");
+        });
+    }
+    
+    public void setMainApp(MainApp mainApp, Stage stage, ClassTabController classTabController) {
         this.mainApp = mainApp;
+        this.stage = stage;
+        this.classTabController = classTabController;
         initializeFields();
         intializeSelection();
     }
