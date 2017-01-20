@@ -2,13 +2,17 @@ package Controller.view.MainSheet.ClassTab;
 
 import Controller.MainApp;
 import Controller.model.Experience;
+import Controller.model.FavoredBonus.FavoredBonus;
+import Controller.model.FavoredBonus.HitPointBonus;
+import Controller.model.FavoredBonus.SkillPointBonus;
 import Controller.model.Level;
-import Controller.view.ClassSelection.ClassSelectionController;
+import Controller.view.MainSheet.ClassTab.ClassSelection.ClassSelectionController;
 import Controller.view.MainSheet.ClassTab.BonusSelection.BonusSelectionController;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,11 +30,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import net.sf.json.JSONArray;
 
 public class ClassTabController {
     private MainApp mainApp;
-    private VBox levelBox;
     
     @FXML
     private GridPane classTable;
@@ -39,7 +41,7 @@ public class ClassTabController {
     public VBox levelUp;
     
     @FXML
-    private HBox nextLevelBox;
+    public HBox nextLevelBox;
     
     @FXML
     private HBox currentLevelBox;
@@ -66,7 +68,7 @@ public class ClassTabController {
     private void initialize() {}
     
     public void createLevelUpPrompt() {
-        levelBox = new VBox();
+        VBox levelBox = new VBox();
         levelBox.setAlignment(Pos.CENTER);
         levelBox.getStyleClass().add("levelBox");
         Label levelUpLabel = new Label("Level Up!");
@@ -83,7 +85,7 @@ public class ClassTabController {
            
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(MainApp.class.getResource("view/ClassSelection/Class Selection.fxml"));
+                loader.setLocation(MainApp.class.getResource("view/MainSheet/ClassTab/ClassSelection/Class Selection.fxml"));
                 AnchorPane root = (AnchorPane) loader.load();
 
                 ClassSelectionController controller = loader.getController();
@@ -103,13 +105,13 @@ public class ClassTabController {
     public void createLevelInfo(Level level, int counter) {
         Label levelNumber = new Label(level.levelNumber + "");
         Label favoredClass = new Label("*");
-        favoredClass.visibleProperty().bind(level.getIsFavoredClassProperty());
-        Label className = new Label(level.className);
-        Label hitDieLabel = new Label("(d" + level.hitDie + ")");
+        favoredClass.visibleProperty().bind(level.charClass.getIsFavoredClassProperty());
+        Label className = new Label(level.charClass.className);
+        Label hitDieLabel = new Label("(d" + level.charClass.hitDie + ")");
         
         TextField hitDie = new TextField();
         hitDie.setAlignment(Pos.CENTER);
-        hitDie.setText(level.hpGained + "");
+        hitDie.setText(level.getHpGained() + "");
         if(level.levelNumber == 1) {
             hitDie.setEditable(false);
             hitDie.getStyleClass().add("textfield-trans");
@@ -118,30 +120,20 @@ public class ClassTabController {
         }
         
         Label hitBonus = new Label();
-        hitBonus.textProperty().bind(Bindings.when(mainApp.mainChar.stats.getConBonusProperty().isNotEqualTo(0)).then(Bindings.format("+%d", mainApp.mainChar.stats.getConBonusProperty())).otherwise("-"));
+        hitBonus.textProperty().bind(Bindings.when(mainApp.mainChar.stats.getStatModifier("CONSTITUTION").isNotEqualTo(0)).then(Bindings.format("+%d", mainApp.mainChar.stats.getStatModifier("CONSTITUTION"))).otherwise("-"));
         hitBonus.setAlignment(Pos.CENTER);
         
-        ObservableList<String> options = FXCollections.observableArrayList("+1 Hit Point", "+1 Skill Point");
-        ComboBox favoredBonus = new ComboBox(options);
-        if(level.favoredBonus == null || level.favoredBonus.getBonusString().equals("HitPoint")){
-            favoredBonus.getSelectionModel().selectFirst();
-        } else {
-            favoredBonus.getSelectionModel().selectLast();
-        }
-        
-        favoredBonus.visibleProperty().bind(level.getIsFavoredClassProperty());
-        
-        favoredBonus.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(oldValue != newValue) {
-                level.switchBonus(mainApp.mainChar, newValue.toString());
-            }
-        });
+        ObservableList<FavoredBonus> bonus = FXCollections.observableArrayList(new HitPointBonus(), new SkillPointBonus());
+        ComboBox<FavoredBonus> favoredBonus = new ComboBox(bonus);
+        favoredBonus.valueProperty().bindBidirectional(level.getFavoredBonusProperty());
+        favoredBonus.visibleProperty().bind(level.charClass.getIsFavoredClassProperty());
         
         Button removeLevel = new Button("Remove");
         
         removeLevel.setOnMouseClicked((e) -> {
             mainApp.mainChar.removeLevel(level);
             listLevels();
+            listBonusPoints();
         });
         
         classTable.addRow(counter, levelNumber, favoredClass, className, hitDieLabel, hitDie, hitBonus, favoredBonus, removeLevel);
@@ -150,9 +142,11 @@ public class ClassTabController {
     public void listLevels() {
         int counter = 0;
         classTable.getChildren().clear();
-        for(int i = mainApp.mainChar.charLevels.size() - 1; i >= 0; i--) {
-            createLevelInfo(mainApp.mainChar.charLevels.get(i), counter++);
+        for(int i = mainApp.mainChar.getCharLevels().size() - 1; i >= 0; i--) {
+            Level level = (Level)mainApp.mainChar.getCharLevels().get(i);
+            createLevelInfo(level, counter++);
         }
+        System.out.println();
     }
     
     public void createBonusInfo(String stat, int counter, int level) {
@@ -171,8 +165,8 @@ public class ClassTabController {
     public void listBonusPoints() {
         int counter = 0;
         bonusPointsTable.getChildren().clear();
-        for(int i = mainApp.mainChar.bonusPoints.size() - 1; i >= 0; i--) {
-            createBonusInfo(mainApp.mainChar.bonusPoints.get(i), counter++, i);
+        for(int i = mainApp.mainChar.bonusStatPoints.size() - 1; i >= 0; i--) {
+            createBonusInfo(mainApp.mainChar.bonusStatPoints.get(i), counter++, i);
         }
     }
     
@@ -183,26 +177,21 @@ public class ClassTabController {
                 if (!newValue.matches("\\d*")) {
                     tf.setText(newValue.replaceAll("[^\\d]", ""));
                 }
-                
-                int currentBonus = level.hpGained;
+
                 int newBonus;
                 try {
                     if(newValue.equals("")) {
                         newBonus = 1;
                     } else {
                         newBonus = Integer.parseInt(newValue);
-                        if(newBonus > level.hitDie) newBonus = level.hitDie;
+                        if(newBonus > level.charClass.hitDie) newBonus = level.charClass.hitDie;
                     }
                 } catch (Exception ex) {
-                    newBonus = level.hitDie;
+                    newBonus = level.charClass.hitDie;
                 }
 
                 tf.setText(newBonus + "");
-                mainApp.mainChar.setMaxHp(mainApp.mainChar.getMaxHp() - currentBonus);
-                mainApp.mainChar.setMaxHp(mainApp.mainChar.getMaxHp() + newBonus);
-                mainApp.mainChar.setCurrentHp(mainApp.mainChar.getCurrentHp() - currentBonus);
-                mainApp.mainChar.setCurrentHp(mainApp.mainChar.getCurrentHp() + newBonus);
-                level.hpGained = newBonus;
+                level.setHpGained(newBonus);
             });
             pause.playFromStart();
         });
@@ -210,10 +199,10 @@ public class ClassTabController {
     
     public void initializeComboBox()  {
         ObservableList<String> options = FXCollections.observableArrayList("(your first level class)");
-        JSONArray classes = mainApp.jsonClasses.getJSONArray("classes");
+        Set<Map.Entry> classes = mainApp.jsonClasses.entrySet();
         
-        for(int i = 0; i < classes.size(); i++) {
-            options.add(classes.getJSONObject(i).getString("className"));
+        for(Map.Entry className : classes) {
+            options.add((String)className.getKey());
         }
         
         favoredClassCombo.getItems().addAll(options);
@@ -221,11 +210,13 @@ public class ClassTabController {
         
         favoredClassCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(oldValue != newValue) {
-                if(!newValue.equals("(your first level class)")) {
-                    mainApp.mainChar.updateFavoredClass(newValue.toString());
-                } else {
-                    mainApp.mainChar.updateFavoredClass(mainApp.mainChar.charLevels.get(0).className);
+                String newFavoredClass = newValue.toString();
+                if(newValue.equals("(your first level class)")) {
+                    Level temp = (Level)mainApp.mainChar.getCharLevels().get(0);
+                    newFavoredClass = temp.charClass.className;
                 }
+                
+                mainApp.mainChar.setFavoredClass(newFavoredClass);
             }
         });
     }
@@ -253,16 +244,21 @@ public class ClassTabController {
     }
     
     public void createBindings() {
-        levelBox.visibleProperty().bind(mainApp.mainChar.getRemainingLevelsProperty().greaterThan(0));
-        levelBox.managedProperty().bind(levelBox.visibleProperty());
+        levelUp.visibleProperty().bind(mainApp.mainChar.getRemainingLevelsProperty().greaterThan(0));
+        levelUp.managedProperty().bind(levelUp.visibleProperty());
         nextLevelBox.visibleProperty().bind(mainApp.mainChar.getRemainingLevelsProperty().isEqualTo(0));
         nextLevelBox.managedProperty().bind(nextLevelBox.visibleProperty());
-        nextLevelLabel.textProperty().bind(Bindings.format("Next level: %d (%d XP to go)", mainApp.mainChar.getCurrentLevelProperty().add(1), Experience.getNextLevelXpValueProperty().subtract(mainApp.mainChar.getTotalXpProperty())));
-        currentLevelBox.visibleProperty().bind(mainApp.mainChar.getCurrentLevelProperty().greaterThan(0));
-        statBonusButton.disableProperty().bind(mainApp.mainChar.getBonusLeftProperty().isEqualTo(0));
-        statBonusButton.textProperty().bind(Bindings.when(statBonusButton.disableProperty()).then(Bindings.format("Next attribute bonus in %d levels", Bindings.createIntegerBinding(() -> 4 - (mainApp.mainChar.getCurrentLevel() % 4), mainApp.mainChar.getCurrentLevelProperty()))).otherwise("Click to increase attributes!"));
+        nextLevelLabel.textProperty().bind(Bindings.format("Next level: %d (%d XP to go)", Bindings.size(mainApp.mainChar.getCharLevels())
+                                           .add(1), Experience.getNextLevelXpValueProperty()
+                                           .subtract(mainApp.mainChar.getTotalXpProperty())));
+        currentLevelBox.visibleProperty().bind(Bindings.size(mainApp.mainChar.getCharLevels()).greaterThan(0));
+        statBonusButton.disableProperty().bind(mainApp.mainChar.getBonusStatLeftProperty().isEqualTo(0));
+        statBonusButton.textProperty().bind(Bindings.when(statBonusButton.disableProperty())
+                                                    .then(Bindings.format("Next attribute bonus in %d levels", Bindings.createIntegerBinding(() ->
+                                                        4 - (Bindings.size(mainApp.mainChar.getCharLevels()).intValue() % 4), mainApp.mainChar.getCharLevels())))
+                                                    .otherwise("Click to increase attributes!"));
         statBonusButton.styleProperty().bind(Bindings.when(statBonusButton.disableProperty().not()).then("-fx-text-fill: red;").otherwise("-fx-text-fill: black;"));
-        levelLabel.textProperty().bind(mainApp.mainChar.getCurrentLevelProperty().asString());
+        levelLabel.textProperty().bind(Bindings.size(mainApp.mainChar.getCharLevels()).asString());
         xpLabel.textProperty().bind(Bindings.format("%d/%d", mainApp.mainChar.getTotalXpProperty(), Experience.getNextLevelXpValueProperty()));
     }
     

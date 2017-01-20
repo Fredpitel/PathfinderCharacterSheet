@@ -37,11 +37,11 @@
                         <Label text="Name" />
                         <TextField fx:id="charName" prefHeight="37.0" prefWidth="238.0" styleClass="textfield" />
                         <Label fx:id="name" />
-                        <Label fx:id="race" text="No race" />
+                        <Label fx:id="race" />
                         <Label fx:id="classes" />
                         <Label fx:id="hp" />
-                        <Label fx:id="ac" text="AC: 0" />
-                        <Label fx:id="cash" text="Cash: 0 GP" />
+                        <Label fx:id="ac" />
+                        <Label fx:id="cash" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -54,20 +54,173 @@
             </VBox>
          </top>
          <right>
-            <HBox prefHeight="863.0" prefWidth="884.0" styleClass="levelBox" BorderPane.alignment="CENTER" />
+            <HBox prefHeight="863.0" prefWidth="885.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="861.0" prefWidth="295.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="25.0" prefWidth="295.0" styleClass="levelBox" text="Basics" />
+                        <VBox prefHeight="845.0" prefWidth="292.0" styleClass="levelBox">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="86.0" prefWidth="290.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="STR" />
+                                          <Label fx:id="strBonus" alignment="CENTER" prefHeight="36.0" prefWidth="39.0" styleClass="levelBox" />
+                                          <Label fx:id="strLabel" styleClass="abilityTotal" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="25.0" right="25.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="DEX" />
+                                          <Label fx:id="dexBonus" alignment="CENTER" prefHeight="36.0" prefWidth="39.0" styleClass="levelBox" />
+                                          <Label fx:id="dexLabel" styleClass="abilityTotal" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="25.0" right="25.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="CON" />
+                                          <Label fx:id="conBonus" alignment="CENTER" prefHeight="36.0" prefWidth="39.0" styleClass="levelBox" />
+                                          <Label fx:id="conLabel" styleClass="abilityTotal" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="25.0" right="25.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="86.0" prefWidth="290.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="INT" />
+                                          <Label fx:id="intBonus" alignment="CENTER" prefHeight="36.0" prefWidth="39.0" styleClass="levelBox" />
+                                          <Label fx:id="intLabel" styleClass="abilityTotal" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="25.0" right="25.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="WIS" />
+                                          <Label fx:id="wisBonus" alignment="CENTER" prefHeight="36.0" prefWidth="39.0" styleClass="levelBox" />
+                                          <Label fx:id="wisLabel" styleClass="abilityTotal" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="25.0" right="25.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="CHA" text="CHA" />
+                                          <Label fx:id="chaBonus" alignment="CENTER" prefHeight="36.0" prefWidth="39.0" styleClass="levelBox" />
+                                          <Label fx:id="chaLabel" styleClass="abilityTotal" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="25.0" right="25.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="74.0" prefWidth="293.0" spacing="25.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="54.0" prefWidth="60.0" styleClass="levelBox">
+                                       <children>
+                                          <Label fx:id="hpLabel" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" />
+                                          <Label text="HP" />
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" top="10.0" />
+                                       </HBox.margin>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="54.0" prefWidth="60.0" styleClass="levelBox">
+                                       <children>
+                                          <Label fx:id="acLabel" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" />
+                                          <Label text="AC" />
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" top="10.0" />
+                                       </HBox.margin>
+                                    </VBox>
+                                    <VBox prefHeight="29.0" prefWidth="46.0">
+                                       <HBox.margin>
+                                          <Insets bottom="15.0" top="15.0" />
+                                       </HBox.margin>
+                                       <children>
+                                          <Label fx:id="touchLabel" alignment="CENTER" prefHeight="25.0" prefWidth="51.0" styleClass="specialAc" />
+                                          <Label fx:id="flatLabel" alignment="CENTER" prefHeight="25.0" prefWidth="48.0" styleClass="specialAc" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="86.0" prefWidth="290.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="Fort" />
+                                          <Label fx:id="fortRes" alignment="CENTER" prefHeight="36.0" prefWidth="39.0" styleClass="levelBox" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="25.0" right="25.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="Ref" />
+                                          <Label fx:id="refRes" alignment="CENTER" prefHeight="36.0" prefWidth="39.0" styleClass="levelBox" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="25.0" right="25.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="CHA1" text="Wil" />
+                                          <Label fx:id="wilRes" alignment="CENTER" prefHeight="36.0" prefWidth="39.0" styleClass="levelBox" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="25.0" right="25.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="861.0" prefWidth="295.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="25.0" prefWidth="295.0" styleClass="levelBox" text="Skills &amp; Feats" />
+                        <VBox prefHeight="845.0" prefWidth="292.0" styleClass="levelBox" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="861.0" prefWidth="295.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="25.0" prefWidth="295.0" styleClass="levelBox" text="Inventory" />
+                        <VBox prefHeight="845.0" prefWidth="292.0" styleClass="levelBox" />
+                     </children>
+                  </VBox>
+               </children></HBox>
          </right>
          <bottom>
             <Pane prefHeight="39.0" prefWidth="1800.0" styleClass="levelBox" BorderPane.alignment="CENTER" />
          </bottom>
          <center>
-            <TabPane prefHeight="861.0" prefWidth="915.0" styleClass="levelBox" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane fx:id="tabs" prefHeight="861.0" prefWidth="915.0" styleClass="levelBox" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
-                <Tab closable="false" text="Classes">
+                <Tab fx:id="classTabContainer" closable="false">
                     <content>
                         <fx:include fx:id="classTab" source="ClassTab/Class Tab.fxml" />                    
                     </content>
                 </Tab>
-                <Tab text="Background">
+                <Tab>
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>

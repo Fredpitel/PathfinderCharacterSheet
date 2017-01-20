@@ -51,3 +51,14 @@
 .levelUp {
     -fx-text-fill: red;
 }
+
+.abilityTotal {
+    -fx-font-size: 12;
+    -fx-text-fill: black;
+    -fx-background-color: lightgray;
+}
+
+.specialAc {
+    -fx-font-size: 12;
+    -fx-text-fill: gray;
+}

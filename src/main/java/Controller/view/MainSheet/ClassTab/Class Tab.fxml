@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <ScrollPane hbarPolicy="NEVER" prefHeight="865.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.view.MainSheet.ClassTab.ClassTabController">
    <content>
       <AnchorPane styleClass="mainSheet" stylesheets="@../../MainSheetStyles.css">
@@ -44,6 +43,9 @@
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
                   </VBox>
                   <HBox fx:id="nextLevelBox" alignment="CENTER" prefWidth="927.0">
                      <children>

@@ -82,8 +82,8 @@ public class BonusSelectionController {
     
     @FXML
     private void initializeFields() {
-        pointsLeft.textProperty().bind(mainApp.mainChar.getBonusLeftProperty().asString("%s bonus point(s) left to add"));
-        if(mainApp.mainChar.getBonusLeft() ==  1) {
+        pointsLeft.textProperty().bind(mainApp.mainChar.getBonusStatLeftProperty().asString("%s bonus point(s) left to add"));
+        if(mainApp.mainChar.getBonusStatLeft() ==  1) {
             addPoints.setDisable(true);
         }
     }
@@ -108,7 +108,7 @@ public class BonusSelectionController {
         removePoints.setDisable(false);
         currentLevel++;
         points.setText(currentLevel + "");
-        if(currentLevel == mainApp.mainChar.getBonusLeft()) {
+        if(currentLevel == mainApp.mainChar.getBonusStatLeft()) {
             addPoints.setDisable(true);
         }
     }
@@ -160,9 +160,9 @@ public class BonusSelectionController {
         addStatPoints();
         points.setText("1");
         removePoints.setDisable(true);
-        if(mainApp.mainChar.getBonusLeft() == 1){
+        if(mainApp.mainChar.getBonusStatLeft() == 1){
             addPoints.setDisable(true);
-        } else if(mainApp.mainChar.getBonusLeft() == 0) {
+        } else if(mainApp.mainChar.getBonusStatLeft() == 0) {
             addPoints.setDisable(true);
             add.setDisable(true);
             addAndClose.setDisable(true);
@@ -170,7 +170,7 @@ public class BonusSelectionController {
     }
     
     private void addStatPoints() {
-        int pointsAdded = checkValue(points, "1", "" + mainApp.mainChar.getBonusLeft());
+        int pointsAdded = checkValue(points, "1", "" + mainApp.mainChar.getBonusStatLeft());
         mainApp.mainChar.addBonusStatPoints(selected.getText(), pointsAdded);
         classTabController.listBonusPoints();
     }

@@ -1,4 +1,4 @@
-package Controller.view.ClassSelection;
+package Controller.view.MainSheet.ClassTab.ClassSelection;
 
 import Controller.MainApp;
 import Controller.JSON.JSONUtils;
@@ -6,6 +6,8 @@ import Controller.model.Requirements.Requirement;
 import Controller.model.Requirements.RequirementFactory;
 import Controller.view.MainSheet.ClassTab.ClassTabController;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,7 +25,6 @@ public class ClassSelectionController {
     private MainApp mainApp;
     private Stage stage;
     private ClassTabController classTabController;
-    private JSONArray classes;
     private final ArrayList<Button> buttons;
     private Button selected;
     private int currentLevel = 1;
@@ -83,24 +84,24 @@ public class ClassSelectionController {
     
     @FXML
     private void intializeSelection() {
-        classes = mainApp.jsonClasses.getJSONArray("classes");
-
-        for(int i = 0; i < classes.size(); i++){
-            Button btn = new Button(classes.getJSONObject(i).getString("className"));
+        Set<Map.Entry> classes = mainApp.jsonClasses.entrySet();
+        for(Map.Entry jsonClass : classes){
+            JSONObject classObject = (JSONObject) jsonClass.getValue();
+            Button btn = new Button(classObject.getString("className"));
             btn.getStyleClass().add("button-trans");
             btn.setPrefWidth(548);
             classBox.getChildren().add(btn);
             buttons.add(btn);
             
-            if(getErrors(i).size() > 0) {
+            if(getErrors(classObject).size() > 0) {
                 btn.getStyleClass().add("button-invalid");
             }
             
-            addClickListener(btn, i);
+            addClickListener(btn, classObject);
         }
     }
     
-    private void addClickListener(Button btn, int index) {
+    private void addClickListener(Button btn, JSONObject jsonClass) {
         btn.setOnMouseClicked((e) -> {
             addAndClose.setDisable(false);
             add.setDisable(false);
@@ -111,17 +112,17 @@ public class ClassSelectionController {
             
             btn.setStyle("-fx-border-width: 3");
             classText.getChildren().clear();
-            showClassDescription(index);
+            showClassDescription(jsonClass);
             selected = btn;
         });
     }
     
-    private void showClassDescription(int index) {
-        JSONArray description = classes.getJSONObject(index).getJSONArray("description");
+    private void showClassDescription(JSONObject jsonClass) {
+        JSONArray description = jsonClass.getJSONArray("description");
         
-        className.setText(classes.getJSONObject(index).getString("className") + "\n\n");
+        className.setText(jsonClass.getString("className") + "\n\n");
         
-        ArrayList<String> errors = getErrors(index);
+        ArrayList<String> errors = getErrors(jsonClass);
         
         if(errors.size() > 0) {
             for(String error: errors) {
@@ -143,9 +144,9 @@ public class ClassSelectionController {
         }
     }
     
-    private ArrayList<String> getErrors(int index) {
+    private ArrayList<String> getErrors(JSONObject jsonClass) {
         ArrayList<String> errors = new ArrayList();
-        JSONArray requirements = classes.getJSONObject(index).getJSONArray("requirements");
+        JSONArray requirements =jsonClass.getJSONArray("requirements");
         
         for(int j = 0; j < requirements.size(); j++) {
             JSONObject req = requirements.getJSONObject(j);
@@ -226,7 +227,7 @@ public class ClassSelectionController {
     
     private void createClassLevel() {
         int levelsAdded = checkValue(levels, "1", "" + mainApp.mainChar.getRemainingLevels());
-        mainApp.mainChar.addCharLevels(selected.getText(), levelsAdded, classes.getJSONObject(buttons.indexOf(selected)).getInt("hitdie"));
+        mainApp.mainChar.addCharLevels(mainApp.jsonClasses.getJSONObject(selected.getText()), levelsAdded);
         classTabController.listLevels();
     }
     

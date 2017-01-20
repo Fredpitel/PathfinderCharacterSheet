@@ -18,8 +18,8 @@
             <VBox fx:id="classBox" prefHeight="277.0" prefWidth="641.0" styleClass="levelBox">
                <children>
                   <Button fx:id="strength" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="STRENGTH" />
-                  <Button fx:id="constitution" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="CONSTITUTION" />
                   <Button fx:id="dexterity" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="DEXTERITY" />
+                  <Button fx:id="constitution" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="CONSTITUTION" />
                   <Button fx:id="intelligence" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="INTELLIGENCE" />
                   <Button fx:id="wisdom" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="WISDOM" />
                   <Button fx:id="charisma" mnemonicParsing="false" onMouseClicked="#statChosen" prefHeight="46.0" prefWidth="639.0" styleClass="button-trans" text="CHARISMA" />

@@ -1,200 +1,201 @@
 package Controller.model;
 
-import Controller.MainApp;
 import Controller.model.Alignment.possibleAlignments;
-import Controller.model.FavoredBonus.FavoredBonusFactory;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
+import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import net.sf.json.JSONArray;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import net.sf.json.JSONObject;
 
 public class Character {
-    
     private final StringProperty charName;
     private final StringProperty playerName;
+    
+    private final ObservableMap<CharClass, Integer> classMap;
     private final StringProperty charClassesString;
+    private final StringProperty favoredClass;
+    
+    private final ObservableList<Level> charLevels;
+    
+    private final ObservableMap<IntegerProperty, ObservableList<Modifier>> modifiers;
+    
     private final IntegerProperty maxHp;
     private final IntegerProperty currentHp;
-    private final IntegerProperty maxSkillPoints;
+    private final IntegerProperty damageReceived;
+    
+    private final IntegerProperty baseAC;
+    private final IntegerProperty totalAC;
+    
+    private final IntegerProperty fort;
+    private final IntegerProperty ref;
+    private final IntegerProperty wil;
+    
+    private final IntegerProperty bonusHitPoints;
+    private final IntegerProperty bonusSkillPoints;
+    public final ObservableList<String> bonusStatPoints;
+    
     private final IntegerProperty remainingLevels;
-    private final IntegerProperty currentLevel;
-    private final IntegerProperty bonusLeft;
+    private final IntegerProperty bonusStatLeft;
     private final LongProperty totalXp;
     private final IntegerProperty goldTotal;
     
     public possibleAlignments alignment;
     public God god;
-    public final ArrayList<Level> charLevels;  
-    public final ArrayList<String> bonusPoints;
-    public String favoredClass;
     public Stats stats;
     
     private final Wealth wealth;
-    private final MainApp mainApp;
     
-    public Character(MainApp mainApp, String charName, String playerName, int startingLevels, int plat, int gold, int silv, int copp) {
-        this.mainApp = mainApp;
+    public Character(String charName, String playerName, int startingLevels, int plat, int gold, int silv, int copp) {
+        this.stats = new Stats();
+        
         this.charName = new SimpleStringProperty(charName);
         this.playerName = new SimpleStringProperty(playerName);
-        this.charClassesString = new SimpleStringProperty("No class");
+        
+        this.favoredClass = new SimpleStringProperty();
+        this.charLevels = FXCollections.observableArrayList(level -> new Observable[] {level.getHpGainedProperty(),
+                                                                                       level.getFavoredBonusProperty(), 
+                                                                                       level.charClass.getIsFavoredClassProperty()});
         this.remainingLevels = new SimpleIntegerProperty(startingLevels);
-        this.currentLevel = new SimpleIntegerProperty(0);
         this.totalXp = new SimpleLongProperty(Experience.XP_TABLE[startingLevels - 1]);
-        this.bonusLeft = new SimpleIntegerProperty(0);
-        this.maxHp = new SimpleIntegerProperty(0);
-        this.currentHp = new SimpleIntegerProperty(0);
-        this.maxSkillPoints = new SimpleIntegerProperty(0);
+        
+        this.classMap = FXCollections.observableMap(new TreeMap<CharClass, Integer>((CharClass c1, CharClass c2) -> c1.className.compareTo(c2.className)));
+        this.charClassesString = new SimpleStringProperty();
+        this.charClassesString.bind(Bindings.createStringBinding(() -> makeCharClassesString(), charLevels, classMap));
+        
+        this.modifiers = FXCollections.observableMap(new HashMap<IntegerProperty, ObservableList<Modifier>>());
+        
+        this.bonusHitPoints = new SimpleIntegerProperty();
+        this.bonusHitPoints.bind(Bindings.createIntegerBinding(() -> charLevels.stream().collect(Collectors.summingInt((level) -> level.charClass.getIsFavoredClass() && level.getFavoredBonus().getType() == 1 ? 1 : 0)), charLevels));
+        this.bonusSkillPoints = new SimpleIntegerProperty(0);
+        this.bonusStatPoints = FXCollections.observableArrayList(new ArrayList());
+        this.bonusStatLeft = new SimpleIntegerProperty(0);
+        this.bonusStatLeft.bind(Bindings.size(charLevels).divide(4).subtract(Bindings.size(bonusStatPoints)));
+        
+        this.maxHp = new SimpleIntegerProperty();
+        this.maxHp.bind((stats.getStatModifier("CONSTITUTION").multiply(Bindings.size(charLevels)))
+                       .add(bonusHitPoints)
+                       .add(Bindings.createIntegerBinding(() -> charLevels.stream().collect(Collectors.summingInt(Level::getHpGained)), charLevels))
+                       .add(Bindings.createIntegerBinding(() -> modifiers.get(maxHp).stream().collect(Collectors.summingInt((modifier) -> modifier.effect)), modifiers)));
+        
+        this.currentHp = new SimpleIntegerProperty();
+        this.damageReceived = new SimpleIntegerProperty(0);
+        this.currentHp.bind(maxHp.subtract(damageReceived));
+        
+        this.baseAC = new SimpleIntegerProperty(10);
+        this.totalAC = new SimpleIntegerProperty();
+        this.totalAC.bind(baseAC.add(stats.getStatModifier("CONSTITUTION")));
+        
+        this.fort = new SimpleIntegerProperty();
+        this.fort.bind(stats.getStatModifier("CONSTITUTION")
+                      .add(Bindings.createIntegerBinding(() -> classMap.entrySet().stream().collect(Collectors.summingInt((entry) -> entry.getKey().fortProg.getNewSave(entry.getValue()))), classMap))
+                      .add(Bindings.createIntegerBinding(() -> modifiers.get(fort).stream().collect(Collectors.summingInt((modifier) -> modifier.effect)), modifiers)));
+        this.ref = new SimpleIntegerProperty();
+        this.ref.bind(stats.getStatModifier("DEXTERITY")
+                      .add(Bindings.createIntegerBinding(() -> classMap.entrySet().stream().collect(Collectors.summingInt((entry) -> entry.getKey().refProg.getNewSave(entry.getValue()))), classMap))
+                      .add(Bindings.createIntegerBinding(() -> modifiers.get(ref).stream().collect(Collectors.summingInt((modifier) -> modifier.effect)), modifiers)));
+        this.wil = new SimpleIntegerProperty();
+        this.wil.bind(stats.getStatModifier("WISDOM")
+                      .add(Bindings.createIntegerBinding(() -> classMap.entrySet().stream().collect(Collectors.summingInt((entry) -> entry.getKey().wilProg.getNewSave(entry.getValue()))), classMap))
+                      .add(Bindings.createIntegerBinding(() -> modifiers.get(wil).stream().collect(Collectors.summingInt((modifier) -> modifier.effect)), modifiers)));
+        
         this.wealth = new Wealth(plat, gold, silv, copp);
         this.goldTotal = new SimpleIntegerProperty(wealth.calculateGoldTotal());
         this.alignment = possibleAlignments.NO_ALIGNMENT;
-        this.charLevels = new ArrayList();
-        this.bonusPoints = new ArrayList();
-        this.favoredClass = null;
-        this.stats = new Stats();
     }
     
-    public void addCharLevels(String className, int levelsAdded, int hitDie) {
+    public void addCharLevels(JSONObject jsonClass, int levelsAdded) {
         if(charLevels.isEmpty()) {
-            favoredClass = className;
+            setFavoredClass(jsonClass.getString("className"));
         }
         
         for(int i = 0; i < levelsAdded; i++) {
-            Level newLevel = new Level(className, favoredClass, hitDie);
-            
-            setCurrentLevel(getCurrentLevel() + 1);
-            if(className.equals(favoredClass)) {
-                newLevel.favoredBonus.modifyMainChar(this);
-            }
-            
+            CharClass charClass = new CharClass(jsonClass, this);
+            Level newLevel = new Level(charClass);
             charLevels.add(newLevel);
-            
-            if(newLevel.levelNumber % 4 == 0) {
-                setBonusLeft(getBonusLeft() + 1);
-            }
-            
-            Experience.setNextLevelXpValue(getCurrentLevel());
+            Experience.setNextLevelXpValue(charLevels.size());
+
+            int count = classMap.containsKey(charClass) ? classMap.get(charClass) : 0;
+            classMap.put(charClass, count + 1);
         }
         
-        updateHp();
         setRemainingLevels(getRemainingLevels() - levelsAdded);
-        updateClassesString();
     }
     
-    public void removeLevel(Level level) {
-        charLevels.remove(level);
+    public void removeLevel(Level removedLevel) {
         Level.levelCounter--;
-        if(level.className.equals(favoredClass)) {
-            level.favoredBonus.unModifyMainChar(this);
+        
+        if(classMap.get(removedLevel.charClass) == 1) {
+            classMap.remove(removedLevel.charClass);
+        } else {
+            classMap.put(removedLevel.charClass, classMap.get(removedLevel.charClass) - 1);
         }
         
+        if(charLevels.size() % 4 == 0){
+            if(bonusStatPoints.size() == charLevels.size() / 4 && !bonusStatPoints.isEmpty()){
+                removeBonusStatPoint(bonusStatPoints.get(bonusStatPoints.size() - 1));
+            }
+        }
+        
+        charLevels.remove(removedLevel);
+        
         for(int i = 1; i <= charLevels.size(); i++) {
-            Level leveltemp = charLevels.get(i - 1);
-            leveltemp.levelNumber = i;
+            Level level = charLevels.get(i - 1);
+            level.levelNumber = i;
             if(i == 1) {
-               leveltemp.hpGained = leveltemp.hitDie;
-               if(!leveltemp.className.equals(favoredClass)){
-                   updateFavoredClass(leveltemp.className);
-                   favoredClass = leveltemp.className;
-                   leveltemp.favoredBonus = new FavoredBonusFactory().createBonus("+1 Hit Point");
+               level.setHpGained(level.charClass.hitDie);
+               if(!level.charClass.className.equals(getFavoredClass())){
+                   setFavoredClass(level.charClass.className);
                }
             }
         }
         
-        if(getCurrentLevel() % 4 == 0){
-            setBonusLeft(getBonusLeft() - 1);
-        }
-        setCurrentLevel(getCurrentLevel() - 1);
         setRemainingLevels(getRemainingLevels() + 1);
-        Experience.setNextLevelXpValue(getCurrentLevel());
-        updateHp();
-        updateClassesString();
-    }
-    
-    public void updateFavoredClass(String newFavoredClass) {
-        for(Level level : charLevels) {
-            if(level.favoredBonus != null) {
-                level.favoredBonus.unModifyMainChar(this);
-            }
-            if(level.className.equals(newFavoredClass)) {
-                level.favoredBonus = new FavoredBonusFactory().createBonus("+1 Hit Point");
-                level.favoredBonus.modifyMainChar(this);
-                level.setIsFavoredClass(true);
-            } else {
-                level.favoredBonus = null;
-                level.setIsFavoredClass(false);
-            }
-        }
-        
-        favoredClass = newFavoredClass;
-    }
-    
-    private void updateHp() {
-        setMaxHp(0);
-        setCurrentHp(0);
-        for(Level level : charLevels) {
-            setMaxHp(getMaxHp() + level.hpGained + stats.getConBonus());
-            setCurrentHp(getCurrentHp() + level.hpGained + stats.getConBonus());
-            if(level.className.equals(favoredClass)){
-                level.favoredBonus.modifyMainChar(this);
-            }
-        }
-    }
-    
-    private void updateClassesString() {
-        TreeMap<String, Integer> classMap = new TreeMap();
-        
-        for(Level level : charLevels) {
-            int count = classMap.containsKey(level.className) ? classMap.get(level.className) : 0;
-            classMap.put(level.className, count + 1);
-        }
-        
-        if(classMap.size() == 1) {
-            setCharClasses(charLevels.get(0).className + " " + classMap.get(charLevels.get(0).className));
-        } else {
-            String newClassesString = "";
-            for(String key : classMap.keySet()) {
-                JSONArray classes = mainApp.jsonClasses.getJSONArray("classes");
-                for(int i = 0; i < classes.size(); i++) {
-                    JSONObject charClass = classes.getJSONObject(i);
-                    if(charClass.getString("className").equals(key)){
-                        newClassesString += (charClass.getString("abb") + " " + classMap.get(key) + "/");
-                    }
-                }
-            }
-            if(!newClassesString.equals("")) {
-                setCharClasses(newClassesString.substring(0, newClassesString.length() - 1));
-            } else {
-                setCharClasses("No class");
-            }
-        }
+        Experience.setNextLevelXpValue(charLevels.size());
     }
 
     public void addBonusStatPoints(String stat, int pointsAdded) {
         stats.add(stat, pointsAdded);
         for(int i = 0; i < pointsAdded; i++) {
-            bonusPoints.add(stat);
-        }
-        setBonusLeft(getBonusLeft() - pointsAdded);
-        
-        if(stat.equals("CONSTITUTION")){
-            updateHp();
+            bonusStatPoints.add(stat);
         }
     }
     
     public void removeBonusStatPoint(String stat) {
         stats.remove(stat);
-        bonusPoints.remove(stat);
-        setBonusLeft(getBonusLeft() + 1);
-        
-        if(stat.equals("CONSTITUTION")){
-            updateHp();
+        bonusStatPoints.remove(stat);
+    }
+    
+    private String makeCharClassesString() {
+        String charClasseString = "";
+        switch (Bindings.size(classMap).intValue()) {
+            case 0:
+                charClasseString = "No class";
+                break;
+            case 1:
+                Entry<CharClass, Integer> entry = classMap.entrySet().stream().findFirst().get();
+                charClasseString  = entry.getKey().className + " " + entry.getValue();
+                break;
+            default:
+                for(CharClass key : classMap.keySet()) {
+                    charClasseString += key.className + " " + classMap.get(key) + "/";
+                }   
+                charClasseString = charClasseString.substring(0, charClasseString.length() - 1);
+                break;
         }
+
+        return charClasseString;
     }
     
     public String getCharName() {
@@ -205,7 +206,7 @@ public class Character {
         this.charName.set(charName);
     }
     
-    public StringProperty charNameProperty() {
+    public StringProperty getCharNameProperty() {
         return charName;
     }
     
@@ -217,20 +218,32 @@ public class Character {
         this.playerName.set(playerName);
     }
     
-    public StringProperty playerNameProperty() {
+    public StringProperty getPlayerNameProperty() {
         return playerName;
     }
     
     public String getCharClasses() {
         return charClassesString.get();
     }
-
-    public void setCharClasses(String charName) {
-        this.charClassesString.set(charName);
+    
+    public StringProperty getCharClassesProperty() {
+        return charClassesString;
     }
     
-    public StringProperty charClassesProperty() {
-        return charClassesString;
+    public String getFavoredClass() {
+        return favoredClass.get();
+    }
+
+    public void setFavoredClass(String className) {
+        this.favoredClass.set(className);
+    }
+    
+    public StringProperty getFavoredClassProperty() {
+        return favoredClass;
+    }
+    
+    public ObservableList getCharLevels() {
+        return charLevels;
     }
     
     public int getRemainingLevels() {
@@ -245,28 +258,16 @@ public class Character {
         return remainingLevels;
     }
     
-    public int getCurrentLevel() {
-        return currentLevel.get();
+    public int getBonusStatLeft() {
+        return bonusStatLeft.get();
     }
     
-    public void setCurrentLevel(int level) {
-        this.currentLevel.set(level);
+    public void setBonusStatLeft(int bonus) {
+        this.bonusStatLeft.set(bonus);
     }
     
-    public IntegerProperty getCurrentLevelProperty() {
-        return currentLevel;
-    }
-    
-    public int getBonusLeft() {
-        return bonusLeft.get();
-    }
-    
-    public void setBonusLeft(int bonus) {
-        this.bonusLeft.set(bonus);
-    }
-    
-    public IntegerProperty getBonusLeftProperty() {
-        return bonusLeft;
+    public IntegerProperty getBonusStatLeftProperty() {
+        return bonusStatLeft;
     }
     
     public long getTotalXp() {
@@ -285,10 +286,6 @@ public class Character {
         return maxHp.get();
     }
     
-    public void setMaxHp(int hp) {
-        this.maxHp.set(hp);
-    }
-    
     public IntegerProperty getMaxHpProperty() {
         return maxHp;
     }
@@ -305,16 +302,88 @@ public class Character {
         return currentHp;
     }
     
-    public int getMaxSkillPoints() {
-        return maxSkillPoints.get();
+    public int getDamageReceived() {
+        return damageReceived.get();
     }
     
-    public void setMaxSkillPoints(int skillPoints) {
-        this.maxSkillPoints.set(skillPoints);
+    public void setDamageReceived(int damage) {
+        this.damageReceived.set(damage);
     }
     
-    public IntegerProperty getMaxSkillPointsProperty() {
-        return maxSkillPoints;
+    public IntegerProperty getDamageReceivedProperty() {
+        return damageReceived;
+    }
+    
+    public int getBaseAC() {
+        return baseAC.get();
+    }
+    
+    public void setBaseAC(int ac) {
+        this.baseAC.set(ac);
+    }
+    
+    public IntegerProperty getBaseACProperty() {
+        return baseAC;
+    }
+    
+    public int getTotalAC() {
+        return totalAC.get();
+    }
+    
+    public void setTotalAC(int ac) {
+        this.totalAC.set(ac);
+    }
+    
+    public IntegerProperty getTotalACProperty() {
+        return totalAC;
+    }
+    
+    public int getFort() {
+        return fort.get();
+    }
+    
+    public void setFort(int fort) {
+        this.fort.set(fort);
+    }
+    
+    public IntegerProperty getFortProperty() {
+        return fort;
+    }
+    
+    public int getRef() {
+        return ref.get();
+    }
+    
+    public void setRef(int ref) {
+        this.ref.set(ref);
+    }
+    
+    public IntegerProperty getRefProperty() {
+        return ref;
+    }
+    
+    public int getWil() {
+        return wil.get();
+    }
+    
+    public void setWil(int wil) {
+        this.wil.set(wil);
+    }
+    
+    public IntegerProperty getWilProperty() {
+        return wil;
+    }
+    
+    public int getBonusHitPoints() {
+        return bonusHitPoints.get();
+    }
+    
+    public void setBonusHitPoints(int bonus) {
+        this.bonusHitPoints.set(bonus);
+    }
+    
+    public IntegerProperty getBonusHitPointsProperty() {
+        return bonusHitPoints;
     }
     
     public int getGoldTotal() {

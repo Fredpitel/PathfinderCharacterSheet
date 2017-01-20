@@ -1,5 +1,5 @@
 {
-    "classes" : [
+    "Barbarian": 
         {
             "className": "Barbarian",
             "abb": "BBN",
@@ -36,6 +36,7 @@
                 }
             ]
         },
+    "Bard":
         {
             "className": "Bard",
             "abb": "BRD",
@@ -58,10 +59,15 @@
             ],
             "requirements": []
         },
+    "Cleric":
         {
             "className": "Cleric",
             "abb": "CLR",
             "hitdie": 8,
+            "attackProg": "medium",
+            "fortProg": "fast",
+            "refProg": "slow",
+            "wilProg": "fast",
             "description": [
                 {"title": "Hit Dice: ", "value": "d8"},
                 {"title": "Weapons: ", "value": "Simple"},
@@ -85,8 +91,31 @@
                     "type": "cleric_requirement",
                     "error_message": "Your alignment must be within 1 step of your deity's."
                 }
+            ],
+            "progression": [
+                {"level": 1, "special": ["channel"], "spells": [3,1]},
+                {"level": 2, "special": [], "spells": [4,2]},
+                {"level": 3, "special": ["channel"], "spells": [4,2,1]},
+                {"level": 4, "special": [], "spells": [4,3,2]},
+                {"level": 5, "special": ["channel"], "spells": [4,3,2,1]},
+                {"level": 6, "special": [], "spells": [4,3,3,2]},
+                {"level": 7, "special": ["channel"], "spells": [4,4,3,2,1]},
+                {"level": 8, "special": [], "spells": [4,4,3,3,2]},
+                {"level": 9, "special": ["channel"], "spells": [4,4,4,3,2,1]},
+                {"level": 10, "special": [], "spells": [4,4,4,3,3,2]},
+                {"level": 11, "special": ["channel"], "spells": [4,4,4,4,3,2,1]},
+                {"level": 12, "special": [], "spells": [4,4,4,4,3,3,2]},
+                {"level": 13, "special": ["channel"], "spells": [4,4,4,4,4,3,2,1]},
+                {"level": 14, "special": [], "spells": [4,4,4,4,4,3,3,2]},
+                {"level": 15, "special": ["channel"], "spells": [4,4,4,4,4,4,3,2,1]},
+                {"level": 16, "special": [], "spells": [4,4,4,4,4,4,3,3,2]},
+                {"level": 17, "special": ["channel"], "spells": [4,4,4,4,4,4,4,3,2,1]},
+                {"level": 18, "special": [], "spells": [4,4,4,4,4,4,4,3,3,2]},
+                {"level": 19, "special": ["channel"], "spells": [4,4,4,4,4,4,4,4,3,3]},
+                {"level": 20, "special": [], "spells": [4,4,4,4,4,4,4,4,4,4]}
             ]
         },
+    "Druid":
         {
             "className": "Druid",
             "abb": "DRD",
@@ -123,6 +152,7 @@
                 }
             ]
         },
+    "Fighter":
         {
             "className": "Fighter",
             "abb": "FTR",
@@ -144,6 +174,7 @@
             ],
             "requirements": []
         },
+    "Monk":
         {
             "className": "Monk",
             "abb": "MNK",
@@ -176,6 +207,7 @@
                 }
             ]
         },
+    "Paladin":
         {
             "className": "Paladin",
             "abb": "PAL",
@@ -209,6 +241,7 @@
                 }
             ]
         },
+    "Ranger":
         {
             "className": "Ranger",
             "abb": "RGR",
@@ -231,6 +264,7 @@
             ],
             "requirements": []
         },
+    "Rogue":
         {
             "className": "Rogue",
             "abb": "ROG",
@@ -252,6 +286,7 @@
             ],
             "requirements": []
         },
+    "Sorcerer":
         {
             "className": "Sorcerer",
             "abb": "SOR",
@@ -274,6 +309,7 @@
             ],
             "requirements": []
         },
+    "Wizard":
         {
             "className": "Wizard",
             "abb": "WIZ",
@@ -297,5 +333,4 @@
             ],
             "requirements": []
         }
-    ]
 }

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="mainSheet" stylesheets="@../MainSheetStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.view.ClassSelection.ClassSelectionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="mainSheet" stylesheets="@../../../MainSheetStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.view.MainSheet.ClassTab.ClassSelection.ClassSelectionController">
    <children>
       <Label fx:id="levelsLeft" alignment="CENTER" contentDisplay="CENTER" layoutX="58.0" layoutY="15.0" prefHeight="25.0" prefWidth="1089.0" />
       <ScrollPane hbarPolicy="NEVER" layoutX="644.0" layoutY="51.0" prefHeight="605.0" prefWidth="503.0" styleClass="levelBox">
