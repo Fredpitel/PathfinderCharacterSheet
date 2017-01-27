@@ -21,14 +21,5 @@ public class Progression {
         }
     }
     
-    public int getNewSave(int level) {
-        switch(speed) {
-            case SLOW:
-                return (int) Math.floor(0.34 * level);
-            case FAST:
-                return (int) Math.floor(2 + (level/2));
-            default:
-                return 0;
-        }
-    }
+
 }

@@ -220,10 +220,10 @@
                         <fx:include fx:id="classTab" source="ClassTab/Class Tab.fxml" />                    
                     </content>
                 </Tab>
-                <Tab>
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
+                <Tab fx:id="backgroundTabContainer" closable="false">
+                    <content>
+                        <fx:include fx:id="backgroundTab" source="BackgroundTab/Background Tab.fxml" />                    
+                    </content>
                 </Tab>
               </tabs>
             </TabPane>

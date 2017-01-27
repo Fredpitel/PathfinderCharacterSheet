@@ -20,6 +20,7 @@ public class MainApp extends Application {
     private AnchorPane root;
     
     public JSONObject jsonClasses;
+    public JSONObject jsonRaces;
     public Character mainChar;
     
     @Override
@@ -28,7 +29,7 @@ public class MainApp extends Application {
         this.stage.setTitle("Pathfinder Character Sheet");
         
         jsonClasses = JSONUtils.jsonToObject("JSON Files/classes.json");
-        
+        jsonRaces = JSONUtils.jsonToObject("JSON Files/races.json");
         showMainMenu();
     }
     

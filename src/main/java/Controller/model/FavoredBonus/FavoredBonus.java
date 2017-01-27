@@ -1,5 +1,5 @@
 package Controller.model.FavoredBonus;
 
-public abstract class FavoredBonus {
-    public abstract int getType();
+public interface FavoredBonus {
+    public int getHpBonus();
 }

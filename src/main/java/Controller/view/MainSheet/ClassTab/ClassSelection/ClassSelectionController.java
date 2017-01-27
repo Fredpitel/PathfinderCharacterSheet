@@ -1,7 +1,6 @@
 package Controller.view.MainSheet.ClassTab.ClassSelection;
 
 import Controller.MainApp;
-import Controller.JSON.JSONUtils;
 import Controller.model.Requirements.Requirement;
 import Controller.model.Requirements.RequirementFactory;
 import Controller.view.MainSheet.ClassTab.ClassTabController;

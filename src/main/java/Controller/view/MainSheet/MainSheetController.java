@@ -1,12 +1,13 @@
 package Controller.view.MainSheet;
 
 import Controller.MainApp;
-import Controller.model.Stats;
+import Controller.view.MainSheet.BackgroundTab.BackgroundTabController;
 import Controller.view.MainSheet.ClassTab.ClassTabController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -16,6 +17,9 @@ public class MainSheetController {
     
     @FXML 
     private ClassTabController classTabController;
+    
+    @FXML
+    private BackgroundTabController backgroundTabController;
     
     @FXML
     private TextField charName;
@@ -37,6 +41,9 @@ public class MainSheetController {
     
     @FXML
     private Tab classTabContainer;
+    
+    @FXML
+    private Tab backgroundTabContainer;
     
     @FXML
     private Label strBonus;
@@ -101,41 +108,61 @@ public class MainSheetController {
     private void initialize() {}
     
     public void createBindings() {
-        Stats stats = mainApp.mainChar.stats;
-        
         charName.textProperty().bindBidirectional(mainApp.mainChar.getCharNameProperty());
         classes.textProperty().bind(mainApp.mainChar.getCharClassesProperty());
-        hp.textProperty().bind(Bindings.format("HP: %d/%d", mainApp.mainChar.getCurrentHpProperty(), mainApp.mainChar.getMaxHpProperty()));
-        ac.textProperty().bind(Bindings.format("AC: %d", mainApp.mainChar.getTotalACProperty()));
+        hp.textProperty().bind(Bindings.format("HP: %d/%d", mainApp.mainChar.getHitPoints().getCurrentHpProperty(), mainApp.mainChar.getHitPoints().getMaxHpProperty()));
+        ac.textProperty().bind(Bindings.format("AC: %d", mainApp.mainChar.getTotalAcProperty()));
         cash.textProperty().bind(Bindings.format("Cash: %d GP", mainApp.mainChar.getGoldTotalProperty()));
         
-        strBonus.textProperty().bind(Bindings.when(stats.getStatModifier("STRENGTH").lessThanOrEqualTo(0)).then(stats.getStatModifier("STRENGTH").asString()).otherwise(Bindings.format("+%d", stats.getStatModifier("STRENGTH"))));
-        strLabel.textProperty().bind(mainApp.mainChar.stats.getStat("STRENGTH").asString());
-        dexBonus.textProperty().bind(Bindings.when(stats.getStatModifier("DEXTERITY").lessThanOrEqualTo(0)).then(stats.getStatModifier("DEXTERITY").asString()).otherwise(Bindings.format("+%d", stats.getStatModifier("DEXTERITY"))));
-        dexLabel.textProperty().bind(mainApp.mainChar.stats.getStat("DEXTERITY").asString());
-        conBonus.textProperty().bind(Bindings.when(stats.getStatModifier("CONSTITUTION").lessThanOrEqualTo(0)).then(stats.getStatModifier("CONSTITUTION").asString()).otherwise(Bindings.format("+%d", stats.getStatModifier("CONSTITUTION"))));
-        conLabel.textProperty().bind(mainApp.mainChar.stats.getStat("CONSTITUTION").asString());
-        intBonus.textProperty().bind(Bindings.when(stats.getStatModifier("INTELLIGENCE").lessThanOrEqualTo(0)).then(stats.getStatModifier("INTELLIGENCE").asString()).otherwise(Bindings.format("+%d", stats.getStatModifier("INTELLIGENCE"))));
-        intLabel.textProperty().bind(mainApp.mainChar.stats.getStat("INTELLIGENCE").asString());
-        wisBonus.textProperty().bind(Bindings.when(stats.getStatModifier("WISDOM").lessThanOrEqualTo(0)).then(stats.getStatModifier("WISDOM").asString()).otherwise(Bindings.format("+%d", stats.getStatModifier("WISDOM"))));
-        wisLabel.textProperty().bind(mainApp.mainChar.stats.getStat("WISDOM").asString());
-        chaBonus.textProperty().bind(Bindings.when(stats.getStatModifier("CHARISMA").lessThanOrEqualTo(0)).then(stats.getStatModifier("CHARISMA").asString()).otherwise(Bindings.format("+%d", stats.getStatModifier("CHARISMA"))));
-        chaLabel.textProperty().bind(mainApp.mainChar.stats.getStat("CHARISMA").asString());
+        bindAbilityLabel(strBonus, strLabel, "STRENGTH");
+        bindAbilityLabel(dexBonus, dexLabel, "DEXTERITY");
+        bindAbilityLabel(conBonus, conLabel, "CONSTITUTION");
+        bindAbilityLabel(intBonus, intLabel, "INTELLIGENCE");
+        bindAbilityLabel(wisBonus, wisLabel, "WISDOM");
+        bindAbilityLabel(chaBonus, chaLabel, "CHARISMA");
         
-        hpLabel.textProperty().bind(Bindings.format("%d/%d", mainApp.mainChar.getCurrentHpProperty(), mainApp.mainChar.getMaxHpProperty()));
-        acLabel.textProperty().bind(mainApp.mainChar.getTotalACProperty().asString());
-        touchLabel.textProperty().bind(Bindings.format("%d Tch", mainApp.mainChar.getBaseACProperty().add(mainApp.mainChar.stats.getStatModifier("DEXTERITY"))));
-        flatLabel.textProperty().bind(Bindings.format("%d Flat", mainApp.mainChar.getBaseACProperty()));
+        hpLabel.textProperty().bind(Bindings.format("%d/%d", mainApp.mainChar.getHitPoints().getCurrentHpProperty(), mainApp.mainChar.getHitPoints().getMaxHpProperty()));
+        acLabel.textProperty().bind(mainApp.mainChar.getTotalAcProperty().asString());
+        touchLabel.textProperty().bind(Bindings.format("%d Tch", mainApp.mainChar.getBaseAcProperty()
+                                               .add(mainApp.mainChar.getAbilityScore("DEXTERITY").getScoreModifierProperty())));
+        flatLabel.textProperty().bind(Bindings.format("%d Flat", mainApp.mainChar.getBaseAcProperty()));
         
-        fortRes.textProperty().bind(Bindings.when(mainApp.mainChar.getFortProperty().lessThanOrEqualTo(0)).then(mainApp.mainChar.getFortProperty().asString()).otherwise(Bindings.format("+%d", mainApp.mainChar.getFortProperty())));
-        refRes.textProperty().bind(Bindings.when(mainApp.mainChar.getRefProperty().lessThanOrEqualTo(0)).then(mainApp.mainChar.getRefProperty().asString()).otherwise(Bindings.format("+%d", mainApp.mainChar.getRefProperty())));
-        wilRes.textProperty().bind(Bindings.when(mainApp.mainChar.getWilProperty().lessThanOrEqualTo(0)).then(mainApp.mainChar.getWilProperty().asString()).otherwise(Bindings.format("+%d", mainApp.mainChar.getWilProperty())));
+        fortRes.textProperty().bind(Bindings.when(mainApp.mainChar.getFortProperty().lessThanOrEqualTo(0))
+                                            .then(mainApp.mainChar.getFortProperty().asString())
+                                            .otherwise(Bindings.format("+%d", mainApp.mainChar.getFortProperty())));
+        refRes.textProperty().bind(Bindings.when(mainApp.mainChar.getRefProperty().lessThanOrEqualTo(0))
+                                           .then(mainApp.mainChar.getRefProperty().asString())
+                                           .otherwise(Bindings.format("+%d", mainApp.mainChar.getRefProperty())));
+        wilRes.textProperty().bind(Bindings.when(mainApp.mainChar.getWilProperty().lessThanOrEqualTo(0))
+                                           .then(mainApp.mainChar.getWilProperty().asString())
+                                           .otherwise(Bindings.format("+%d", mainApp.mainChar.getWilProperty())));
+    }
+    
+    private void bindAbilityLabel(Label ability, Label modifier, String abilityName) {
+        ability.textProperty().bind(Bindings.when(getScoreModifierProperty(abilityName).lessThanOrEqualTo(0))
+                                            .then(getScoreModifierProperty(abilityName).asString())
+                                            .otherwise(Bindings.format("+%d", getScoreModifierProperty(abilityName))));
+        modifier.textProperty().bind(getScoreProperty(abilityName).asString());
+    }
+    
+    private IntegerProperty getScoreProperty(String ability) {
+        return mainApp.mainChar.getAbilityScore(ability).getCurrentValueProperty();
+    }
+    
+    private IntegerProperty getScoreModifierProperty(String ability) {
+        return mainApp.mainChar.getAbilityScore(ability).getScoreModifierProperty();
     }
     
     public void initializeTabs() {
         classTabController.setMainApp(mainApp);
         classTabContainer.setGraphic(new Label("Classes"));
-        classTabContainer.getGraphic().styleProperty().bind(Bindings.when((classTabController.levelUp.visibleProperty().not()).and(classTabController.statBonusButton.disableProperty())).then("-fx-text-fill: black;").otherwise("-fx-text-fill: red;"));
+        classTabContainer.getGraphic().styleProperty().bind(Bindings.when((classTabController.levelUp.visibleProperty().not())
+                                                                    .and(classTabController.statBonusButton.disableProperty()))
+                                                                    .then("-fx-text-fill: black;")
+                                                                    .otherwise("-fx-text-fill: red;"));
+    
+        backgroundTabController.setMainApp(mainApp);
+        backgroundTabContainer.setGraphic(new Label("Background"));
     }
     
     public void setMainApp(MainApp mainApp) {

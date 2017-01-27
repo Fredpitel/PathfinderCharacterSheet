@@ -12,7 +12,7 @@ public final class Level {
     
     public CharClass charClass;
     public int levelNumber;
-    
+
     private final IntegerProperty hpGained = new SimpleIntegerProperty(1);
     private final ObjectProperty<FavoredBonus> favoredBonus;
     
@@ -21,6 +21,14 @@ public final class Level {
         levelNumber = levelCounter++;
         if(levelNumber == 1) setHpGained(charClass.hitDie);
         favoredBonus = new SimpleObjectProperty(new HitPointBonus());
+    }
+    
+    public int getHpBonus(Character mainChar) {
+        if(mainChar.getFavoredClass().equals(charClass)) {
+            return favoredBonus.get().getHpBonus();
+        }
+        
+        return 0;
     }
     
     public int getHpGained() {

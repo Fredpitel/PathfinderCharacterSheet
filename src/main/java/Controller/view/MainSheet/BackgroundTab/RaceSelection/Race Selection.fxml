@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="mainSheet" stylesheets="@../../../MainSheetStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.view.MainSheet.BackgroundTab.RaceSelection.RaceSelectionController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="58.0" layoutY="15.0" prefHeight="25.0" prefWidth="1089.0" text="Choose your race" />
+      <ScrollPane hbarPolicy="NEVER" layoutX="644.0" layoutY="51.0" prefHeight="659.0" prefWidth="503.0" styleClass="levelBox">
+         <content>
+            <VBox prefHeight="655.0" prefWidth="476.0" spacing="15.0">
+               <children>
+                  <Label fx:id="raceName" alignment="CENTER" prefHeight="25.0" prefWidth="503.0" styleClass="label-bold" />
+                  <TextFlow fx:id="raceText" prefHeight="591.0" prefWidth="466.0" />
+               </children>
+               <padding>
+                  <Insets left="10.0" top="10.0" />
+               </padding>
+            </VBox>
+         </content>
+      </ScrollPane>
+      <ScrollPane hbarPolicy="NEVER" layoutX="57.0" layoutY="51.0" prefHeight="659.0" prefWidth="551.0">
+         <content>
+            <VBox fx:id="raceBox" prefHeight="657.0" prefWidth="549.0" styleClass="levelBox">
+               <children>
+                  <Label alignment="CENTER" prefHeight="43.0" prefWidth="547.0" styleClass="label-bold" text="- Races -" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+      <HBox alignment="CENTER" layoutX="57.0" layoutY="710.0" prefHeight="89.0" prefWidth="1089.0" spacing="120.0">
+         <children>
+            <Button fx:id="select" disable="true" mnemonicParsing="false" onMouseReleased="#select" styleClass="button-tab" text="Select" />
+            <Button fx:id="cancel" mnemonicParsing="false" onMouseReleased="#cancel" styleClass="button-tab" text="Cancel" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

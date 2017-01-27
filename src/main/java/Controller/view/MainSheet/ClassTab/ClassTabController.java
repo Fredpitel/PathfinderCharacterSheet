@@ -1,6 +1,7 @@
 package Controller.view.MainSheet.ClassTab;
 
 import Controller.MainApp;
+import Controller.model.CharClass;
 import Controller.model.Experience;
 import Controller.model.FavoredBonus.FavoredBonus;
 import Controller.model.FavoredBonus.HitPointBonus;
@@ -105,7 +106,7 @@ public class ClassTabController {
     public void createLevelInfo(Level level, int counter) {
         Label levelNumber = new Label(level.levelNumber + "");
         Label favoredClass = new Label("*");
-        favoredClass.visibleProperty().bind(level.charClass.getIsFavoredClassProperty());
+        favoredClass.visibleProperty().bind(Bindings.createBooleanBinding(() -> level.charClass.equals(mainApp.mainChar.getFavoredClass()), mainApp.mainChar.getFavoredClassProperty()));
         Label className = new Label(level.charClass.className);
         Label hitDieLabel = new Label("(d" + level.charClass.hitDie + ")");
         
@@ -120,13 +121,15 @@ public class ClassTabController {
         }
         
         Label hitBonus = new Label();
-        hitBonus.textProperty().bind(Bindings.when(mainApp.mainChar.stats.getStatModifier("CONSTITUTION").isNotEqualTo(0)).then(Bindings.format("+%d", mainApp.mainChar.stats.getStatModifier("CONSTITUTION"))).otherwise("-"));
+        hitBonus.textProperty().bind(Bindings.when(mainApp.mainChar.getAbilityScore("CONSTITUTION").getScoreModifierProperty().isNotEqualTo(0))
+                                             .then(Bindings.format("+%d", mainApp.mainChar.getAbilityScore("CONSTITUTION").getScoreModifierProperty()))
+                                             .otherwise("-"));
         hitBonus.setAlignment(Pos.CENTER);
         
         ObservableList<FavoredBonus> bonus = FXCollections.observableArrayList(new HitPointBonus(), new SkillPointBonus());
         ComboBox<FavoredBonus> favoredBonus = new ComboBox(bonus);
         favoredBonus.valueProperty().bindBidirectional(level.getFavoredBonusProperty());
-        favoredBonus.visibleProperty().bind(level.charClass.getIsFavoredClassProperty());
+        favoredBonus.visibleProperty().bind(Bindings.createBooleanBinding(() -> level.charClass.equals(mainApp.mainChar.getFavoredClass()), mainApp.mainChar.getFavoredClassProperty()));
         
         Button removeLevel = new Button("Remove");
         
@@ -216,7 +219,7 @@ public class ClassTabController {
                     newFavoredClass = temp.charClass.className;
                 }
                 
-                mainApp.mainChar.setFavoredClass(newFavoredClass);
+                mainApp.mainChar.setFavoredClass(new CharClass(newFavoredClass));
             }
         });
     }

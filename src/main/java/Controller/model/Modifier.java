@@ -1,23 +1,35 @@
 package Controller.model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 
 public class Modifier {
-    public final String target;
-    public final int effect;
-    private final StringProperty source;
-    private final StringProperty type;
-    private final BooleanProperty isStacking;
+    public static enum modifierTypes {ALCHEMICAL, ARMOR, BAB, CIRCUMSTANCE, COMPETENCE, DEFLECTION, DODGE, ENHANCEMENT, 
+                                      INHERENT, INSIGHT, LUCK, MORALE, NATURAL_ARMOR, PROFANE, RACIAL, RESISTANCE, 
+                                      SACRED, SHIELD, SIZE, TRAIT, UNTYPED};
     
-    public Modifier(String target, int effect, String source, String type, boolean isStacking) {
-        this.target = target;
-        this.effect = effect;
+    public final IntegerProperty value;
+    private final StringProperty source;
+    public final boolean isStacking;
+    
+    public Modifier(int value, String source, boolean isStacking) {
+        this.value = new SimpleIntegerProperty(value);
         this.source = new SimpleStringProperty(source);
-        this.type = new SimpleStringProperty(type);
-        this.isStacking = new SimpleBooleanProperty(isStacking);
+        this.isStacking = isStacking;
+    }
+    
+    public int getValue() {
+        return value.get();
+    }
+    
+    public void setValue(int value) {
+        this.value.set(value);
+    }
+    
+    public IntegerProperty getValueProperty() {
+        return value;
     }
 }
