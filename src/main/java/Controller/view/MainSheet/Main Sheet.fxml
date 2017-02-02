@@ -36,7 +36,6 @@
                      <children>
                         <Label text="Name" />
                         <TextField fx:id="charName" prefHeight="37.0" prefWidth="238.0" styleClass="textfield" />
-                        <Label fx:id="name" />
                         <Label fx:id="race" />
                         <Label fx:id="classes" />
                         <Label fx:id="hp" />

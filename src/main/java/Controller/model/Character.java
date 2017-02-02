@@ -1,6 +1,12 @@
 package Controller.model;
 
+import Controller.model.ModifiableObject.HitPoints;
+import Controller.model.ModifiableObject.SavingThrow;
+import Controller.model.ModifiableObject.AbilityScore;
+import Controller.model.ModifiableObject.AC;
+import Controller.model.Modifier.Race;
 import Controller.model.Alignment.possibleAlignments;
+import Controller.model.Modifier.Modifier;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -42,6 +48,8 @@ public class Character {
     
     public final ObservableList<String> bonusStatPoints;
     
+    public final ObservableList<Modifier> modifiers;
+    
     private final IntegerProperty remainingLevels;
     private final IntegerProperty bonusStatLeft;
     private final LongProperty totalXp;
@@ -49,8 +57,8 @@ public class Character {
     
     public possibleAlignments alignment;
     public God god;
-    private Race race;
     
+    private final Race race;
     private final Wealth wealth;
     
     public Character(String charName, String playerName, int startingLevels, int plat, int gold, int silv, int copp) {
@@ -59,7 +67,7 @@ public class Character {
         
         this.favoredClass = new SimpleObjectProperty();
         this.charLevels = FXCollections.observableArrayList(level -> new Observable[] {level.getHpGainedProperty(),
-                                                                                       level.getFavoredBonusProperty()});
+                                                                                       level.getHitPointBonusProperty()});
         this.remainingLevels = new SimpleIntegerProperty(startingLevels);
         this.totalXp = new SimpleLongProperty(Experience.XP_TABLE[startingLevels - 1]);
         
@@ -72,26 +80,26 @@ public class Character {
         this.wealth = new Wealth(plat, gold, silv, copp);
         this.goldTotal = new SimpleIntegerProperty(wealth.calculateGoldTotal());
         
+        this.modifiers = FXCollections.observableArrayList(new ArrayList());
+        
         this.alignment = possibleAlignments.NO_ALIGNMENT;
-        this.abilityScores = new AbilityScores();
+        this.abilityScores = new AbilityScores(modifiers);
         this.hitPoints =  new HitPoints(this);
         
-        this.ac = new AC(abilityScores.getAbilityScore("DEXTERITY").getScoreModifierProperty());
+        this.ac = new AC(this);
         
-        this.fort = new SavingThrow("fort", abilityScores.getAbilityScore("CONSTITUTION").getScoreModifierProperty(), classMap);
-        this.ref = new SavingThrow("ref", abilityScores.getAbilityScore("DEXTERITY").getScoreModifierProperty(), classMap);
-        this.wil = new SavingThrow("wil", abilityScores.getAbilityScore("WISDOM").getScoreModifierProperty(), classMap);
+        this.fort = new SavingThrow("fort", abilityScores.getAbilityScore("CONSTITUTION").getScoreModifierProperty(), classMap, modifiers);
+        this.ref = new SavingThrow("ref", abilityScores.getAbilityScore("DEXTERITY").getScoreModifierProperty(), classMap, modifiers);
+        this.wil = new SavingThrow("wil", abilityScores.getAbilityScore("WISDOM").getScoreModifierProperty(), classMap, modifiers);
         
-        createBindings();
-    }
-    
-    private void createBindings() {
+        this.race = new Race("Choose Race");
+
         charClassesString.bind(Bindings.createStringBinding(() -> makeCharClassesString(), charLevels, classMap));
         bonusStatLeft.bind(Bindings.size(charLevels).divide(4).subtract(Bindings.size(bonusStatPoints)));
     }
     
     public void addCharLevels(JSONObject jsonClass, int levelsAdded) {
-        if(favoredClass.get() == null) {
+        if(favoredClass.get() == null || charLevels.isEmpty()) {
             setFavoredClass(new CharClass(jsonClass));
         }
         
@@ -171,10 +179,18 @@ public class Character {
         }
 
         return charClasseString;
+    } 
+    
+    public StringProperty getRaceNameProperty() {
+        return race.getRaceNameProperty();
     }
     
     public void setRace(String raceName, ArrayList<Pair> modifiers) {
-        this.race = new Race(raceName, modifiers, this);
+        race.removeModifiers(this.modifiers);
+        for(Pair<String, Integer> mod : modifiers) {
+            this.modifiers.add(new Modifier(mod.getValue(), race, getAbilityScore(mod.getKey()), Modifier.modifierTypes.RACIAL, true));
+            race.name.set(raceName);
+        }
     }
     
     public String getCharName() {

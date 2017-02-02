@@ -9,8 +9,6 @@ import javafx.scene.control.TextField;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-
 
 public class MainSheetController {
     private MainApp mainApp;
@@ -25,6 +23,9 @@ public class MainSheetController {
     private TextField charName;
     
     @FXML
+    private Label race;
+    
+    @FXML
     private Label classes;
     
     @FXML
@@ -35,9 +36,6 @@ public class MainSheetController {
     
     @FXML
     private Label cash;
-    
-    @FXML
-    private TabPane tabs;
     
     @FXML
     private Tab classTabContainer;
@@ -109,6 +107,7 @@ public class MainSheetController {
     
     public void createBindings() {
         charName.textProperty().bindBidirectional(mainApp.mainChar.getCharNameProperty());
+        race.textProperty().bind(Bindings.when(mainApp.mainChar.getRaceNameProperty().isEqualTo("Choose Race")).then("No race").otherwise(mainApp.mainChar.getRaceNameProperty()));
         classes.textProperty().bind(mainApp.mainChar.getCharClassesProperty());
         hp.textProperty().bind(Bindings.format("HP: %d/%d", mainApp.mainChar.getHitPoints().getCurrentHpProperty(), mainApp.mainChar.getHitPoints().getMaxHpProperty()));
         ac.textProperty().bind(Bindings.format("AC: %d", mainApp.mainChar.getTotalAcProperty()));

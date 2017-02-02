@@ -1,11 +1,9 @@
 package Controller.model;
 
-import Controller.model.FavoredBonus.FavoredBonus;
-import Controller.model.FavoredBonus.HitPointBonus;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 
 public final class Level {
     static int levelCounter = 1;
@@ -14,21 +12,17 @@ public final class Level {
     public int levelNumber;
 
     private final IntegerProperty hpGained = new SimpleIntegerProperty(1);
-    private final ObjectProperty<FavoredBonus> favoredBonus;
+    private final BooleanProperty hitPointBonus;
     
     public Level(CharClass charClass) {
         this.charClass = charClass;
         levelNumber = levelCounter++;
         if(levelNumber == 1) setHpGained(charClass.hitDie);
-        favoredBonus = new SimpleObjectProperty(new HitPointBonus());
+        hitPointBonus = new SimpleBooleanProperty(true);
     }
     
-    public int getHpBonus(Character mainChar) {
-        if(mainChar.getFavoredClass().equals(charClass)) {
-            return favoredBonus.get().getHpBonus();
-        }
-        
-        return 0;
+    public void switchBonus(){
+        hitPointBonus.set(!hitPointBonus.get());
     }
     
     public int getHpGained() {
@@ -43,15 +37,7 @@ public final class Level {
         return hpGained;
     }
     
-    public FavoredBonus getFavoredBonus() {
-        return favoredBonus.get();
-    }
-    
-    public void setFavoredBonus(FavoredBonus bonus) {
-        favoredBonus.set(bonus);
-    }
-    
-    public ObjectProperty<FavoredBonus> getFavoredBonusProperty() {
-        return favoredBonus;
+    public BooleanProperty getHitPointBonusProperty() {
+        return hitPointBonus;
     }
 }

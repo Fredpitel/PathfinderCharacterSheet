@@ -1,9 +1,11 @@
 package Controller.model;
 
+import Controller.model.ModifiableObject.AbilityScore;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 public class AbilityScores {
@@ -11,10 +13,10 @@ public class AbilityScores {
     
     private final ObservableMap<String, AbilityScore> abilityScoreMap;
     
-    public AbilityScores() {
+    public AbilityScores(ObservableList modifiers) {
         abilityScoreMap = FXCollections.observableMap(new HashMap());
         for(String ability : ABILITIES) {
-            abilityScoreMap.put(ability, new AbilityScore(10));
+            abilityScoreMap.put(ability, new AbilityScore(modifiers));
         }
     }
     

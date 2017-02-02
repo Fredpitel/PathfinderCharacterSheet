@@ -11,7 +11,7 @@
       <HBox alignment="CENTER" layoutY="36.0" prefWidth="915.0" spacing="25.0">
          <children>
             <Label prefWidth="44.0" text="Race:" />
-            <TextField fx:id="raceField" alignment="CENTER" editable="false" onMouseClicked="#chooseRace" styleClass="levelUp" text="Choose Race" />
+            <TextField fx:id="raceField" alignment="CENTER" editable="false" onMouseClicked="#chooseRace" styleClass="levelUp" />
          </children>
          <padding>
             <Insets top="25.0" />

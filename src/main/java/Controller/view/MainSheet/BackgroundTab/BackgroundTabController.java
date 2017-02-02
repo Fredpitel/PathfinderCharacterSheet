@@ -2,8 +2,8 @@ package Controller.view.MainSheet.BackgroundTab;
 
 import Controller.MainApp;
 import Controller.view.MainSheet.BackgroundTab.RaceSelection.RaceSelectionController;
-import Controller.view.MainSheet.ClassTab.ClassSelection.ClassSelectionController;
 import java.io.IOException;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -44,7 +44,13 @@ public class BackgroundTabController {
         }
     } 
     
+    public void createBindings() {
+        raceField.textProperty().bind(mainApp.mainChar.getRaceNameProperty());
+        raceField.styleProperty().bind(Bindings.when(mainApp.mainChar.getRaceNameProperty().isEqualTo("Choose Race")).then("-fx-text-fill: red;").otherwise("-fx-text-fill: black;"));
+    }
+    
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
+        createBindings();
     }
 }

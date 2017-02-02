@@ -1,5 +1,8 @@
-package Controller.model;
+package Controller.model.ModifiableObject;
 
+import Controller.model.Character;
+import Controller.model.Level;
+import Controller.model.Modifier.Modifier;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
@@ -8,7 +11,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
-public class HitPoints {
+public class HitPoints extends ModifiableObject {
     private final IntegerProperty maxHp;
     private final IntegerProperty currentHp;
     private final IntegerProperty bonusHp;
@@ -16,6 +19,7 @@ public class HitPoints {
     private final ObservableMap<Modifier.modifierTypes, Modifier> modifiers;
     
     public HitPoints(Character mainChar) {
+        super(mainChar.modifiers);
         maxHp = new SimpleIntegerProperty();
         currentHp = new SimpleIntegerProperty();
         bonusHp = new SimpleIntegerProperty();
@@ -23,11 +27,10 @@ public class HitPoints {
         modifiers = FXCollections.observableMap(new HashMap());
         
         currentHp.bind(maxHp.subtract(damageRecieved));
-        bonusHp.bind(Bindings.createIntegerBinding(() -> mainChar.getCharLevels().stream().collect(Collectors.summingInt((level) -> level.getHpBonus(mainChar))), mainChar.getCharLevels(), mainChar.getFavoredClassProperty()));
+        bonusHp.bind(Bindings.createIntegerBinding(() -> mainChar.getCharLevels().stream().collect(Collectors.summingInt((level) -> level.getHitPointBonusProperty().get() ? 1 : 0)), mainChar.getCharLevels(), mainChar.getFavoredClassProperty()));
         maxHp.bind((mainChar.getAbilityScore("CONSTITUTION").getScoreModifierProperty().multiply(Bindings.size(mainChar.getCharLevels())))
                    .add(bonusHp)
-                   .add(Bindings.createIntegerBinding(() -> mainChar.getCharLevels().stream().collect(Collectors.summingInt(Level::getHpGained)), mainChar.getCharLevels()))
-                   .add(Bindings.createIntegerBinding(() -> modifiers.entrySet().stream().collect(Collectors.summingInt((entry) -> entry.getValue().getValue())), modifiers)));
+                   .add(Bindings.createIntegerBinding(() -> mainChar.getCharLevels().stream().collect(Collectors.summingInt(Level::getHpGained)), mainChar.getCharLevels())));
     }
     
     public IntegerProperty getMaxHpProperty() {

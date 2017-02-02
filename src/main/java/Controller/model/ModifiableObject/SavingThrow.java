@@ -1,27 +1,25 @@
-package Controller.model;
+package Controller.model.ModifiableObject;
 
-import java.util.HashMap;
+import Controller.model.CharClass;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-public class SavingThrow {
+public class SavingThrow extends ModifiableObject {
     private final String name;
     private final IntegerProperty value;
-    private final ObservableMap<Modifier.modifierTypes, Modifier> modifiers;
     
-    public SavingThrow(String name, IntegerProperty scoreModifierProperty, ObservableMap classMap) {
+    public SavingThrow(String name, IntegerProperty scoreModifierProperty, ObservableMap classMap, ObservableList modifiers) {
+        super(modifiers);
         this.name = name;
         value = new SimpleIntegerProperty();
-        modifiers = FXCollections.observableMap(new HashMap());
         
         value.bind(scoreModifierProperty
                    .add(Bindings.createIntegerBinding(() -> getNewSave(classMap), classMap))
-                   .add(Bindings.createIntegerBinding(() -> modifiers.entrySet().stream().collect(Collectors.summingInt((entry) -> entry.getValue().getValue())), modifiers)));
+                   .add(modValue));
     }
     
     public IntegerProperty getValueProperty() {

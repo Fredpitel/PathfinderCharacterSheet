@@ -3,9 +3,6 @@ package Controller.view.MainSheet.ClassTab;
 import Controller.MainApp;
 import Controller.model.CharClass;
 import Controller.model.Experience;
-import Controller.model.FavoredBonus.FavoredBonus;
-import Controller.model.FavoredBonus.HitPointBonus;
-import Controller.model.FavoredBonus.SkillPointBonus;
 import Controller.model.Level;
 import Controller.view.MainSheet.ClassTab.ClassSelection.ClassSelectionController;
 import Controller.view.MainSheet.ClassTab.BonusSelection.BonusSelectionController;
@@ -122,13 +119,21 @@ public class ClassTabController {
         
         Label hitBonus = new Label();
         hitBonus.textProperty().bind(Bindings.when(mainApp.mainChar.getAbilityScore("CONSTITUTION").getScoreModifierProperty().isNotEqualTo(0))
-                                             .then(Bindings.format("+%d", mainApp.mainChar.getAbilityScore("CONSTITUTION").getScoreModifierProperty()))
+                                             .then(Bindings
+                                                    .when(mainApp.mainChar.getAbilityScore("CONSTITUTION").getScoreModifierProperty().lessThan(0))
+                                                    .then(mainApp.mainChar.getAbilityScore("CONSTITUTION").getScoreModifierProperty().asString())
+                                                    .otherwise(Bindings.format("+%d", mainApp.mainChar.getAbilityScore("CONSTITUTION").getScoreModifierProperty())))
                                              .otherwise("-"));
         hitBonus.setAlignment(Pos.CENTER);
         
-        ObservableList<FavoredBonus> bonus = FXCollections.observableArrayList(new HitPointBonus(), new SkillPointBonus());
-        ComboBox<FavoredBonus> favoredBonus = new ComboBox(bonus);
-        favoredBonus.valueProperty().bindBidirectional(level.getFavoredBonusProperty());
+        ObservableList<String> bonus = FXCollections.observableArrayList("+1 Hit Point", "+1 Skill Point");
+        ComboBox<String> favoredBonus = new ComboBox(bonus);
+        favoredBonus.getSelectionModel().selectFirst();
+        favoredBonus.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(!oldValue.equals(newValue)) {
+                level.switchBonus();
+            }
+        });
         favoredBonus.visibleProperty().bind(Bindings.createBooleanBinding(() -> level.charClass.equals(mainApp.mainChar.getFavoredClass()), mainApp.mainChar.getFavoredClassProperty()));
         
         Button removeLevel = new Button("Remove");
