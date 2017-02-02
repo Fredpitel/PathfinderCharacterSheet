@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane hbarPolicy="NEVER" prefHeight="865.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.view.MainSheet.ClassTab.ClassTabController">
+<ScrollPane hbarPolicy="NEVER" prefHeight="865.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainApp.view.MainSheet.ClassTab.ClassTabController">
    <content>
       <AnchorPane styleClass="mainSheet" stylesheets="@../../MainSheetStyles.css">
          <children>

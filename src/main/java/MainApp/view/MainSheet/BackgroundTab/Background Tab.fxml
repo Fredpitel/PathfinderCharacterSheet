@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="865.0" prefWidth="915.0" styleClass="mainSheet" stylesheets="@../../MainSheetStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.view.MainSheet.BackgroundTab.BackgroundTabController">
+<AnchorPane prefHeight="865.0" prefWidth="915.0" styleClass="mainSheet" stylesheets="@../../MainSheetStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainApp.view.MainSheet.BackgroundTab.BackgroundTabController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="915.0" style="-fx-border-style: solid;" text="Background" textAlignment="CENTER" />
       <HBox alignment="CENTER" layoutY="36.0" prefWidth="915.0" spacing="25.0">
@@ -23,7 +23,7 @@
          </padding>
          <children>
             <Label text="Alignment: " />
-            <TextField fx:id="alignmentField" alignment="CENTER" editable="false" styleClass="levelUp" text="Choose Alignment" />
+            <TextField fx:id="alignmentField" alignment="CENTER" editable="false" onMouseClicked="#chooseAlignment" styleClass="levelUp" text="Choose Alignment" />
             <Label text="Deity: " />
             <TextField fx:id="deityField" alignment="CENTER" editable="false" styleClass="levelUp" text="Choose Deity" />
          </children>

@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="757.0" styleClass="mainSheet" stylesheets="@../../../MainSheetStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.view.MainSheet.ClassTab.BonusSelection.BonusSelectionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="757.0" styleClass="mainSheet" stylesheets="@../../../MainSheetStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainApp.view.MainSheet.ClassTab.BonusSelection.BonusSelectionController">
    <children>
       <HBox alignment="CENTER" layoutX="60.0" layoutY="436.0" prefHeight="89.0" prefWidth="637.0" spacing="120.0">
          <children>

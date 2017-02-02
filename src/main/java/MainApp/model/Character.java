@@ -55,7 +55,7 @@ public class Character {
     private final LongProperty totalXp;
     private final IntegerProperty goldTotal;
     
-    public possibleAlignments alignment;
+    public Alignment alignment;
     public God god;
     
     private final Race race;
@@ -82,7 +82,7 @@ public class Character {
         
         this.modifiers = FXCollections.observableArrayList(new ArrayList());
         
-        this.alignment = possibleAlignments.NO_ALIGNMENT;
+        this.alignment = new Alignment();
         this.abilityScores = new AbilityScores(modifiers);
         this.hitPoints =  new HitPoints(this);
         
@@ -187,10 +187,18 @@ public class Character {
     
     public void setRace(String raceName, ArrayList<Pair> modifiers) {
         race.removeModifiers(this.modifiers);
+        race.name.set(raceName);
         for(Pair<String, Integer> mod : modifiers) {
             this.modifiers.add(new Modifier(mod.getValue(), race, getAbilityScore(mod.getKey()), Modifier.modifierTypes.RACIAL, true));
-            race.name.set(raceName);
         }
+    }
+    
+    public void setAlignment(String alignmentName, String abb) {
+        alignment.setAlignment(alignmentName, abb);
+    }
+    
+    public StringProperty getAlignmentProperty() {
+        return alignment.getAlignmentProperty();
     }
     
     public String getCharName() {

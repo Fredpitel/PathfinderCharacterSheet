@@ -10,11 +10,11 @@ public class ClericRequirement implements Requirement{
     
     @Override
     public boolean validate(Character mainChar, JSONObject requirement){
-        if(mainChar.alignment == possibleAlignments.NO_ALIGNMENT || mainChar.god == null) {
+        if(mainChar.alignment.alignment == possibleAlignments.NO_ALIGNMENT || mainChar.god == null) {
             return true;
         } else {
             possibleAlignments godAlignment = mainChar.god.alignment;
-            possibleAlignments charAlignment = mainChar.alignment;
+            possibleAlignments charAlignment = mainChar.alignment.alignment;
             
             ArrayList<possibleAlignments> validAlignments = getValidAlignments(godAlignment);
             return validAlignments.contains(charAlignment);

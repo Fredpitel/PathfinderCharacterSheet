@@ -8,6 +8,6 @@ public class AlignmentRequirement implements Requirement {
     @Override
     public boolean validate(Character mainChar, JSONObject requirement) {
         JSONArray validAlignments = requirement.getJSONArray("alignments");
-        return validAlignments.contains(mainChar.alignment);
+        return validAlignments.contains(mainChar.alignment.alignment);
     }
 }

@@ -21,6 +21,7 @@ public class MainApp extends Application {
     
     public JSONObject jsonClasses;
     public JSONObject jsonRaces;
+    public JSONObject jsonAlignments;
     public Character mainChar;
     
     @Override
@@ -30,6 +31,7 @@ public class MainApp extends Application {
         
         jsonClasses = JSONUtils.jsonToObject("JSON Files/classes.json");
         jsonRaces = JSONUtils.jsonToObject("JSON Files/races.json");
+        jsonAlignments = JSONUtils.jsonToObject("JSON Files/alignments.json");
         showMainMenu();
     }
     
