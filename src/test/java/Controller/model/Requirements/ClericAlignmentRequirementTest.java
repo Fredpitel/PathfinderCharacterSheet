@@ -1,6 +1,6 @@
 package Controller.model.Requirements;
 
-import Controller.model.Alignment.possibleAlignments;
+import MainApp.model.Alignment.possibleAlignments;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
