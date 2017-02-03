@@ -4,17 +4,16 @@ import MainApp.model.Alignment.possibleAlignments;
 import MainApp.model.Alignment;
 import MainApp.model.Character;
 import java.util.ArrayList;
-import net.sf.json.JSONObject;
 
 public class ClericRequirement implements Requirement{
     
     @Override
-    public boolean validate(Character mainChar, JSONObject requirement){
-        if(mainChar.alignment.alignment == possibleAlignments.NO_ALIGNMENT || mainChar.god == null) {
+    public boolean validate(Character mainChar){
+        if(mainChar.alignment.getAlignmentProperty().get() == possibleAlignments.NO_ALIGNMENT || mainChar.god == null) {
             return true;
         } else {
             possibleAlignments godAlignment = mainChar.god.alignment;
-            possibleAlignments charAlignment = mainChar.alignment.alignment;
+            possibleAlignments charAlignment = (possibleAlignments) mainChar.alignment.getAlignmentProperty().get();
             
             ArrayList<possibleAlignments> validAlignments = getValidAlignments(godAlignment);
             return validAlignments.contains(charAlignment);

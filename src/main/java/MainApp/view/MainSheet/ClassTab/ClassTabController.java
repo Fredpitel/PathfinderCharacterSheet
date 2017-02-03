@@ -1,9 +1,11 @@
 package MainApp.view.MainSheet.ClassTab;
 
 import MainApp.MainApp;
+import MainApp.model.Character;
 import MainApp.model.CharClass;
 import MainApp.model.Experience;
 import MainApp.model.Level;
+import MainApp.model.Requirements.Requirement;
 import MainApp.view.MainSheet.ClassTab.ClassSelection.ClassSelectionController;
 import MainApp.view.MainSheet.ClassTab.BonusSelection.BonusSelectionController;
 import java.io.IOException;
@@ -105,6 +107,9 @@ public class ClassTabController {
         Label favoredClass = new Label("*");
         favoredClass.visibleProperty().bind(Bindings.createBooleanBinding(() -> level.charClass.equals(mainApp.mainChar.getFavoredClass()), mainApp.mainChar.getFavoredClassProperty()));
         Label className = new Label(level.charClass.className);
+        className.styleProperty().bind(Bindings.when(level.charClass.getValidClassProperty())
+                                               .then("-fx-text-fill: black;")
+                                               .otherwise("-fx-text-fill: red;"));
         Label hitDieLabel = new Label("(d" + level.charClass.hitDie + ")");
         
         TextField hitDie = new TextField();
@@ -154,7 +159,6 @@ public class ClassTabController {
             Level level = (Level)mainApp.mainChar.getCharLevels().get(i);
             createLevelInfo(level, counter++);
         }
-        System.out.println();
     }
     
     public void createBonusInfo(String stat, int counter, int level) {

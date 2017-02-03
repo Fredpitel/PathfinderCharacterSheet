@@ -149,8 +149,8 @@ public class ClassSelectionController {
         
         for(int j = 0; j < requirements.size(); j++) {
             JSONObject req = requirements.getJSONObject(j);
-            Requirement requirement = new RequirementFactory().createRequirement(req.getString("type"));
-            if(!requirement.validate(mainApp.mainChar, req)) {
+            Requirement requirement = new RequirementFactory().createRequirement(req);
+            if(!requirement.validate(mainApp.mainChar)) {
                 errors.add(req.getString("error_message"));
             }
         }

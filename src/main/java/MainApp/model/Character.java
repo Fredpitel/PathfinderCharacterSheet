@@ -5,7 +5,6 @@ import MainApp.model.ModifiableObject.SavingThrow;
 import MainApp.model.ModifiableObject.AbilityScore;
 import MainApp.model.ModifiableObject.AC;
 import MainApp.model.Modifier.Race;
-import MainApp.model.Alignment.possibleAlignments;
 import MainApp.model.Modifier.Modifier;
 import java.util.ArrayList;
 import java.util.Map.Entry;
@@ -42,6 +41,8 @@ public class Character {
     
     private final AC ac;
     
+    public final Race race;
+    
     private final SavingThrow fort;
     private final SavingThrow ref;
     private final SavingThrow wil;
@@ -58,7 +59,6 @@ public class Character {
     public Alignment alignment;
     public God god;
     
-    private final Race race;
     private final Wealth wealth;
     
     public Character(String charName, String playerName, int startingLevels, int plat, int gold, int silv, int copp) {
@@ -67,7 +67,8 @@ public class Character {
         
         this.favoredClass = new SimpleObjectProperty();
         this.charLevels = FXCollections.observableArrayList(level -> new Observable[] {level.getHpGainedProperty(),
-                                                                                       level.getHitPointBonusProperty()});
+                                                                                       level.getHitPointBonusProperty(),
+                                                                                       level.charClass.getValidClassProperty()});
         this.remainingLevels = new SimpleIntegerProperty(startingLevels);
         this.totalXp = new SimpleLongProperty(Experience.XP_TABLE[startingLevels - 1]);
         
@@ -100,11 +101,11 @@ public class Character {
     
     public void addCharLevels(JSONObject jsonClass, int levelsAdded) {
         if(favoredClass.get() == null || charLevels.isEmpty()) {
-            setFavoredClass(new CharClass(jsonClass));
+            setFavoredClass(new CharClass(jsonClass, this));
         }
         
         for(int i = 0; i < levelsAdded; i++) {
-            CharClass charClass = new CharClass(jsonClass);
+            CharClass charClass = new CharClass(jsonClass, this);
             Level newLevel = new Level(charClass);
             charLevels.add(newLevel);
             Experience.setNextLevelXpValue(charLevels.size());
@@ -185,9 +186,9 @@ public class Character {
         return race.getRaceNameProperty();
     }
     
-    public void setRace(String raceName, ArrayList<Pair> modifiers) {
+    public void setRace(String raceName, ArrayList<Pair> modifiers, ArrayList abilites, ArrayList languages) {
         race.removeModifiers(this.modifiers);
-        race.name.set(raceName);
+        race.setRace(raceName, abilites, languages);
         for(Pair<String, Integer> mod : modifiers) {
             this.modifiers.add(new Modifier(mod.getValue(), race, getAbilityScore(mod.getKey()), Modifier.modifierTypes.RACIAL, true));
         }
@@ -197,7 +198,11 @@ public class Character {
         alignment.setAlignment(alignmentName, abb);
     }
     
-    public StringProperty getAlignmentProperty() {
+    public StringProperty getAlignmentNameProperty() {
+        return alignment.getAlignmentNameProperty();
+    }
+    
+    public ObjectProperty getAlignmentProperty() {
         return alignment.getAlignmentProperty();
     }
     

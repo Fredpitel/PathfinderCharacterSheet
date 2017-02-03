@@ -19,6 +19,7 @@ import net.sf.json.JSONObject;
 public class RaceSelectionController {
     private MainApp mainApp;
     private Stage stage;
+    private BackgroundTabController backgroundTabController;
     private final ArrayList<Button> buttons;
     private Button selected;
     
@@ -99,14 +100,29 @@ public class RaceSelectionController {
     
     @FXML
     private void select() {
-        JSONArray jsonModifiers =  mainApp.jsonRaces.getJSONObject(selected.getText()).getJSONArray("modifiers");
+        JSONObject jsonRace = mainApp.jsonRaces.getJSONObject(selected.getText());
+        JSONArray jsonModifiers =  jsonRace.getJSONArray("modifiers");
         ArrayList<Pair> modifiers = new ArrayList<>();
         for(int i = 0; i < jsonModifiers.size(); i++) {
             JSONObject jsonModifier = jsonModifiers.getJSONObject(i);
             Pair pair = new Pair(jsonModifier.getString("stat"), jsonModifier.getInt("modifier"));
             modifiers.add(pair);
         }
-        mainApp.mainChar.setRace(selected.getText(), modifiers);
+        
+        JSONArray jsonAbilities = jsonRace.getJSONArray("abilities");
+        ArrayList<String> abilities = new ArrayList();
+        for(int i = 0; i < jsonAbilities.size(); i++) {
+            abilities.add(jsonAbilities.getString(i));
+        }
+        
+        JSONArray jsonLanguages = jsonRace.getJSONArray("starting_languages");
+        ArrayList<String> languages = new ArrayList();
+        for(int i = 0; i < jsonLanguages.size(); i++) {
+            languages.add(jsonLanguages.getString(i));
+        }
+        
+        mainApp.mainChar.setRace(selected.getText(), modifiers, abilities, languages);
+        backgroundTabController.listRacialAbilitesAndLanguages();
         stage.close();
     }
     
@@ -118,6 +134,7 @@ public class RaceSelectionController {
     public void setMainApp(MainApp mainApp, Stage stage, BackgroundTabController backgroundTabController) {
         this.mainApp = mainApp;
         this.stage = stage;
+        this.backgroundTabController = backgroundTabController;
         initializeRace();
     }
 }

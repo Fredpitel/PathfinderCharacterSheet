@@ -35,8 +35,8 @@
             {"title": "", "value": "A lawful neutral character admires order and tradition, or seeks to live by a code. He might fear chaos and disorder, and perhaps have good reason to do so from past experience. A lawful neutral person is not as concerned about who rules him so much as how secure he and his compatriots are, and finds great solace in the normality of society. Such a character may admire the strongest of leaders and punishments if they keep order, and he may support wars against other nations even if his own country is a brutal invader—his only concern is the rightness of the military action.\n\nA lawful neutral character who follows his own code never breaks it willingly, and may become a martyr to defend it."}
         ]
     },
-    "Neutral": {
-        "alignmentName": "Neutral",
+    "True Neutral": {
+        "alignmentName": "True Neutral",
         "abb": "TN",
         "description": [
             {"preface": "Our whims and desires are irrelevant, compared to the turning wheel of the world. I am who I am. Trust no one but your friends and family. The wheel turns in spite of us. Systems come and go. All empires fade. Time is a healer. The seasons never change. The sun does not care what it rises over.\n"}, 

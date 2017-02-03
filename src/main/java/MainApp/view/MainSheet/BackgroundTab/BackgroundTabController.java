@@ -7,10 +7,15 @@ import java.io.IOException;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class BackgroundTabController {
     MainApp mainApp;
@@ -23,6 +28,12 @@ public class BackgroundTabController {
     
     @FXML
     private TextField deityField;
+    
+    @FXML
+    private VBox abilityBox;
+    
+    @FXML
+    private VBox languageBox;
     
     @FXML
     private void chooseRace() {
@@ -45,6 +56,23 @@ public class BackgroundTabController {
         }
     }
     
+    public void listRacialAbilitesAndLanguages() {
+        abilityBox.getChildren().clear();
+        languageBox.getChildren().clear();
+        
+        for(String ability : mainApp.mainChar.race.abilities) {
+            Label label = new Label(ability);
+            label.alignmentProperty().set(Pos.CENTER);
+            abilityBox.getChildren().add(label);
+        }
+        
+        for(String language : mainApp.mainChar.race.languages) {
+            Label label = new Label(language);
+            label.alignmentProperty().set(Pos.CENTER);
+            languageBox.getChildren().add(label);
+        }
+    }
+    
     @FXML
     private void chooseAlignment() {
         Stage stage = new Stage();
@@ -64,13 +92,13 @@ public class BackgroundTabController {
         } catch (IOException exc) {
             exc.printStackTrace();
         }
-    } 
+    }
     
     public void createBindings() {
         raceField.textProperty().bind(mainApp.mainChar.getRaceNameProperty());
         raceField.styleProperty().bind(Bindings.when(mainApp.mainChar.getRaceNameProperty().isEqualTo("Choose Race")).then("-fx-text-fill: red;").otherwise("-fx-text-fill: black;"));
-        alignmentField.textProperty().bind(mainApp.mainChar.getAlignmentProperty());
-        alignmentField.styleProperty().bind(Bindings.when(mainApp.mainChar.getAlignmentProperty().isEqualTo("Choose Alignment")).then("-fx-text-fill: red;").otherwise("-fx-text-fill: black;"));
+        alignmentField.textProperty().bind(mainApp.mainChar.getAlignmentNameProperty());
+        alignmentField.styleProperty().bind(Bindings.when(mainApp.mainChar.getAlignmentNameProperty().isEqualTo("Choose Alignment")).then("-fx-text-fill: red;").otherwise("-fx-text-fill: black;"));
     }
     
     public void setMainApp(MainApp mainApp) {

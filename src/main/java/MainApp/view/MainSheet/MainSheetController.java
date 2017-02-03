@@ -1,6 +1,7 @@
 package MainApp.view.MainSheet;
 
 import MainApp.MainApp;
+import MainApp.model.Level;
 import MainApp.view.MainSheet.BackgroundTab.BackgroundTabController;
 import MainApp.view.MainSheet.ClassTab.ClassTabController;
 import javafx.fxml.FXML;
@@ -155,13 +156,31 @@ public class MainSheetController {
     public void initializeTabs() {
         classTabController.setMainApp(mainApp);
         classTabContainer.setGraphic(new Label("Classes"));
-        classTabContainer.getGraphic().styleProperty().bind(Bindings.when((classTabController.levelUp.visibleProperty().not())
-                                                                    .and(classTabController.statBonusButton.disableProperty()))
+        classTabContainer.getGraphic().styleProperty().bind(Bindings.when(Bindings.createBooleanBinding(() -> validateClassTab(), 
+                                                                                                              classTabController.levelUp.visibleProperty(), 
+                                                                                                              classTabController.statBonusButton.disableProperty(), 
+                                                                                                              mainApp.mainChar.getCharLevels(), 
+                                                                                                              mainApp.mainChar.getAlignmentProperty()))
                                                                     .then("-fx-text-fill: black;")
                                                                     .otherwise("-fx-text-fill: red;"));
     
         backgroundTabController.setMainApp(mainApp);
         backgroundTabContainer.setGraphic(new Label("Background"));
+    }
+    
+    private boolean validateClassTab() {
+        return !classTabController.levelUp.visibleProperty().get()
+               && classTabController.statBonusButton.disableProperty().get()
+               && validateLevels();
+    }
+    
+    private boolean validateLevels() {
+        boolean res = true;
+        for(Level level : mainApp.mainChar.getCharLevels()) {
+            res = level.charClass.getValidClassProperty().get();
+        }
+        
+        return res;
     }
     
     public void setMainApp(MainApp mainApp) {

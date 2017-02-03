@@ -3,6 +3,9 @@
         {
             "raceName": "Dwarf",
             "modifiers": [{"stat": "CONSTITUTION", "modifier": 2}, {"stat": "WISDOM", "modifier": 2}, {"stat": "CHARISMA", "modifier": -2}],
+            "abilities": ["Darkvision", "Defense Training", "Dwarven Weapon Familiarity", "Greed", "Hardy", "Hatred", "Slow and Steady", "Stability", "Stonecunning"],
+            "starting_languages": ["Common", "Dwarven"],
+            "possible_languages": ["Giant", "Gnome", "Goblin", "Orc", "Terran", "Undercommon"],
             "description": [
                 {"title": "Type: ", "value": "Humanoid (Dwarf)"},
                 {"title": "Constitution Modifier: ", "value": "+2"},
@@ -25,6 +28,9 @@
         {
             "raceName": "Elf",
             "modifiers": [{"stat": "DEXTERITY", "modifier": 2}, {"stat": "INTELLIGENCE", "modifier": 2}, {"stat": "CONSTITUTION", "modifier": -2}],
+            "abilities": ["Low-Light vision", "Elven Immunities", "Elven Magic", "Elven Weapon Familiarity", "Keen Senses"],
+            "starting_languages": ["Common", "Elven"],
+            "possible_languages": ["Celestial", "Draconic", "Gnoll", "Gnome", "Goblin", "Orc", "Sylvan"],
             "description": [
                 {"title": "Type: ", "value": "Humanoid (Elf)"},
                 {"title": "Dexterity Modifier: ", "value": "+2"},
@@ -47,6 +53,9 @@
         {
             "raceName": "Gnome",
             "modifiers": [{"stat": "STRENGTH", "modifier": -2}, {"stat": "CONSTITUTION", "modifier": 2}, {"stat": "CHARISMA", "modifier": 2}],
+            "abilities": ["Low-Light vision", "Dancing Lights", "Defensive Training", "Ghost Sound", "Gnome Magic", "Gnomish Weapon Familiarity", "Hatred", "Illusion Resistance", "Keen Senses", "Obsessive", "Prestidigitation", "Speak with Animals"],
+            "starting_languages": ["Common", "Gnome", "Sylvan"],
+            "possible_languages": ["Draconic", "Dwarven", "Elven", "Giant", "Goblin", "Orc"],            
             "description": [
                 {"title": "Type: ", "value": "Humanoid (Gnome)"},
                 {"title": "Strength Modifier: ", "value": "-2"},
@@ -69,6 +78,9 @@
         {
             "raceName": "Half-Elf",
             "modifiers": [],
+            "abilities": ["+2 to One Ability Score", "Adaptability", "Elf Blood", "Elven Immunities", "Keen Senses", "Low-Light Vision", "Multitalented"],
+            "starting_languages": ["Common", "Elven"],
+            "possible_languages": ["Any"], 
             "description": [
                 {"title": "Type: ", "value": "Humanoid (Elf, Human)"},
                 {"title": "Speed: ", "value": "30 ft."},
@@ -88,6 +100,9 @@
         {
             "raceName": "Half-Orc",
             "modifiers": [],
+            "abilities": ["+2 to One Ability Score", "Darkvision", "Intimidating", "Orc Blood", "Orc Ferocity", "Orcish Weapon Familiarity"],
+            "starting_languages": ["Common", "Orc"],
+            "possible_languages": ["Abyssal", "Draconic", "Giant", "Gnoll", "Goblin"],
             "description": [
                 {"title": "Type: ", "value": "Humanoid (Human, Orc)"},
                 {"title": "Speed: ", "value": "30 ft."},
@@ -107,6 +122,9 @@
         {
             "raceName": "Halfling",
             "modifiers": [{"stat": "STRENGTH", "modifier": -2}, {"stat": "DEXTERITY", "modifier": 2}, {"stat": "CHARISMA", "modifier": 2}],
+            "abilities": ["Fearless", "Halfling Luck", "Halfling Weapon Familiarity", "Keen Senses", "Sure-Footed"],
+            "starting_languages": ["Common", "Halfling"],
+            "possible_languages": ["Dwarven", "Elven", "Gnome", "Goblin"],
             "description": [
                 {"title": "Type: ", "value": "Humanoid (Halfling)"},
                 {"title": "Strength Modifier: ", "value": "-2"},
@@ -129,6 +147,9 @@
         {
             "raceName": "Human",
             "modifiers": [],
+            "abilities": ["+2 to One Ability Score", "Bonus Feat", "Skilled"],
+            "starting_languages": ["Common"],
+            "possible_languages": ["Any"],
             "description": [
                 {"title": "Type: ", "value": "Humanoid (Human)"},
                 {"title": "Speed: ", "value": "30 ft."},
